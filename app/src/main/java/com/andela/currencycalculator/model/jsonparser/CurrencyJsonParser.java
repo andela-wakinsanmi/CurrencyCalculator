@@ -17,6 +17,7 @@ import java.util.HashMap;
  */
 public class CurrencyJsonParser {
     HashMap<String, Double> allDataFromJson;
+    public static String BASE_CURRENCY;
 
     private String jsonUrl =  "https://openexchangerates.org/api/latest.json?app_id=125d7e1c1f664d0488a4262f599038ae";
 
@@ -56,7 +57,6 @@ public class CurrencyJsonParser {
                 // give it 15 seconds to respond
                 //connection.setReadTimeout(15*1000);
                 connection.connect();
-                StringBuffer buffer = new StringBuffer();
 
                 // read the output from the server
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -67,7 +67,6 @@ public class CurrencyJsonParser {
                 while ((line = reader.readLine()) != null)
                 {
                     manipulateStringData(line);
-                    buffer.append(line + "\n");
                 }
                 //return stringBuilder.toString();
             }
@@ -105,15 +104,21 @@ public class CurrencyJsonParser {
         if(allDataFromJson != null && line.split(":")[0].trim().length() > 1){
             String currencyName = line.split(":")[0].trim().replace("\"", "");
             Double currencyExchangeRate = Double.parseDouble(line.split(":")[1].trim().replace(",",""));
-            //currency = currency.substring(currency.indexOf("\""));
-            Log.d("waleola", currencyName + " = " + currencyExchangeRate);
-
+            allDataFromJson.put(currencyName,currencyExchangeRate);
 
         }
         if(line.split(":")[0].trim().equals("\"rates\"")){
             allDataFromJson = new HashMap<>();
         }
 
+        if(line.split(":")[0].trim().equals("\"base\"")){
+            CurrencyJsonParser.BASE_CURRENCY = line.split(":")[1].trim();
+        }
+
+    }
+
+    public HashMap<String, Double> getAllDataFromJson(){
+        return allDataFromJson;
     }
 
 
