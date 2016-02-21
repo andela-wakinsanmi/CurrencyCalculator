@@ -3,32 +3,49 @@ package com.andela.currencycalculator.model.jsonparser;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.andela.currencycalculator.model.manager.CurrencyModel;
+import com.andela.currencycalculator.model.manager.ParserDbManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Created by Spykins on 18/02/2016.
  */
 public class CurrencyJsonParser {
-    HashMap<String, Double> allDataFromJson;
-    public static String BASE_CURRENCY;
+    private ArrayList<CurrencyModel> allDataFromJson;
+    private  String baseCurrency;
+    private ParserDbManager parserDbManager;
 
-    private String jsonUrl =  "https://openexchangerates.org/api/latest.json?app_id=125d7e1c1f664d0488a4262f599038ae";
-
-    public CurrencyJsonParser() {
-
-
+    public CurrencyJsonParser(ParserDbManager parserDbManager) {
+        this.parserDbManager = parserDbManager;
     }
 
     public void loadRate()   {
         FetchExchangeFromJson exchangeRateTask = new FetchExchangeFromJson();
         exchangeRateTask.execute();
+    }
+
+    private void manipulateStringData(String line){
+
+        if(allDataFromJson != null && line.split(":")[0].trim().length() > 1){
+            String currencyName = line.split(":")[0].trim().replace("\"", "");
+            Double currencyExchangeRate = Double.parseDouble(line.split(":")[1].trim().replace(",",""));
+            allDataFromJson.add(new CurrencyModel(baseCurrency, currencyExchangeRate, currencyName));
+        }
+        if(line.split(":")[0].trim().equals(JsonParserConfig.JSON_RATES_KEY.getRealName())){
+            allDataFromJson = new ArrayList<>();
+        }
+
+        if(line.split(":")[0].trim().equals(JsonParserConfig.JSON_BASE_CURRENCY.getRealName())){
+            baseCurrency = line.split(":")[1].trim();
+        }
+
     }
 
     public class FetchExchangeFromJson extends AsyncTask<String, Void, String[]>{
@@ -39,12 +56,10 @@ public class CurrencyJsonParser {
 
             URL url;
             BufferedReader reader = null;
-            //StringBuilder stringBuilder;
-
             try
             {
                 // create the HttpURLConnection
-                Uri jsonUri = Uri.parse(jsonUrl);
+                Uri jsonUri = Uri.parse(JsonParserConfig.JSON_URL.getRealName());
                 url = new URL(jsonUri.toString());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -55,30 +70,25 @@ public class CurrencyJsonParser {
                 //connection.setDoOutput(true);
 
                 // give it 15 seconds to respond
-                //connection.setReadTimeout(15*1000);
+                connection.setReadTimeout(15*1000);
                 connection.connect();
 
                 // read the output from the server
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                //stringBuilder = new StringBuilder();
-                String jsonFile = "";
 
                 String line = "";
                 while ((line = reader.readLine()) != null)
                 {
                     manipulateStringData(line);
                 }
-                //return stringBuilder.toString();
+                parserDbManager.parseDataFromJson(allDataFromJson);
             }
             catch (Exception e)
             {
                 e.printStackTrace();
-                //throw e;
             }
             finally
             {
-                // close the reader; this can throw an exception too, so
-                // wrap it in another try/catch block.
                 if (reader != null)
                 {
                     try
@@ -94,34 +104,7 @@ public class CurrencyJsonParser {
 
             return null;
         }
-
-
-
     }
-
-    private void manipulateStringData(String line){
-
-        if(allDataFromJson != null && line.split(":")[0].trim().length() > 1){
-            String currencyName = line.split(":")[0].trim().replace("\"", "");
-            Double currencyExchangeRate = Double.parseDouble(line.split(":")[1].trim().replace(",",""));
-            allDataFromJson.put(currencyName,currencyExchangeRate);
-
-        }
-        if(line.split(":")[0].trim().equals("\"rates\"")){
-            allDataFromJson = new HashMap<>();
-        }
-
-        if(line.split(":")[0].trim().equals("\"base\"")){
-            CurrencyJsonParser.BASE_CURRENCY = line.split(":")[1].trim();
-        }
-
-    }
-
-    public HashMap<String, Double> getAllDataFromJson(){
-        return allDataFromJson;
-    }
-
-
 
 }
 
