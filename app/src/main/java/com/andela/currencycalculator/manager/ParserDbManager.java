@@ -17,13 +17,14 @@ public class ParserDbManager {
     private JsonParserInterface jsonParserInterface;
     private static ParserDbManager parserDbManager;
     private ArrayList<Currency> allCurrency;
+    Context context;
 
     private ParserDbManager(Context context) {
+        this.context = context;
         currencyJsonParser = new CurrencyJsonParser(this);
         jsonParserInterface = (JsonParserInterface) context;
         allCurrency = new ArrayList<>();
         dbHandler = new DbHandler(context, null, null, 1);
-        getDataFromJson();
     }
 
     public static ParserDbManager getInstance(Context context) {
@@ -36,7 +37,7 @@ public class ParserDbManager {
 
     }
 
-    private void getDataFromJson() {
+    public void getDataFromJson() {
         currencyJsonParser.loadRate();
     }
 
@@ -60,5 +61,9 @@ public class ParserDbManager {
 
     public interface JsonParserInterface {
         void notifyActivity();
+    }
+
+    public boolean hasDatabase(){
+        return dbHandler.hasDataBase(context);
     }
 }
