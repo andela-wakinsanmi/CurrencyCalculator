@@ -14,19 +14,20 @@ import java.util.ArrayList;
 public class ParserDbManager {
     private CurrencyJsonParser currencyJsonParser;
     private DbHandler dbHandler;
+    private JsonParserInterface jsonParserInterface;
     private static ParserDbManager parserDbManager;
     private ArrayList<Currency> allCurrency;
 
     private ParserDbManager(Context context) {
         currencyJsonParser = new CurrencyJsonParser(this);
+        jsonParserInterface = (JsonParserInterface) context;
         allCurrency = new ArrayList<>();
-        dbHandler = new DbHandler(context,null,null,1);
+        dbHandler = new DbHandler(context, null, null, 1);
         getDataFromJson();
-        //addAllCurrencyDataToDb();
     }
 
-    public static ParserDbManager getInstance(Context context){
-        if(parserDbManager == null){
+    public static ParserDbManager getInstance(Context context) {
+        if (parserDbManager == null) {
             parserDbManager = new ParserDbManager(context);
             return parserDbManager;
         }
@@ -35,22 +36,29 @@ public class ParserDbManager {
 
     }
 
-    private void getDataFromJson(){
+    private void getDataFromJson() {
         currencyJsonParser.loadRate();
     }
 
-    public void addAllCurrencyDataToDb(){
-        for(Currency currency : allCurrency){
+    public void addAllCurrencyDataToDb() {
+        for (Currency currency : allCurrency) {
             dbHandler.insertCurrencyInDatabase(currency);
         }
+        jsonParserInterface.notifyActivity();
+
     }
 
-    public ArrayList<Currency> readAllCurrencyDataFromDb(){
+    public ArrayList<Currency> readAllCurrencyDataFromDb() {
         return dbHandler.readCurrencyFromDatabase();
     }
 
     public void parseDataFromJson(ArrayList<Currency> allData) {
+
         allCurrency = allData;
         addAllCurrencyDataToDb();
+    }
+
+    public interface JsonParserInterface {
+        void notifyActivity();
     }
 }
