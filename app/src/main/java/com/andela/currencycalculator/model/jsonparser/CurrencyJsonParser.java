@@ -34,10 +34,11 @@ public class CurrencyJsonParser {
 
     private void manipulateStringData(String line) {
 
-        if (allDataFromJson != null && line.split(":")[0].trim().length() > 1) {
+        if (allDataFromJson != null && line.split(":").length > 1) {
             String currencyName = StringManipulator.clearApostrophe(line.split(":")[0]);
-            Double currencyExchangeRate = Double.parseDouble(StringManipulator.
-                    clearApostrophe(line.split(":")[1]));
+            String cleanString = StringManipulator.removeLastComma(line.split(":")[1].trim());
+            Double currencyExchangeRate = Double.parseDouble(cleanString);
+
             allDataFromJson.add(new Currency(baseCurrency, currencyExchangeRate, currencyName));
         }
         if (line.split(":")[0].trim().equals(JsonParserConfig.JSON_RATES_KEY.getRealName())) {
@@ -47,6 +48,7 @@ public class CurrencyJsonParser {
         if (line.split(":")[0].trim().equals(JsonParserConfig.JSON_BASE_CURRENCY.getRealName())) {
             baseCurrency = line.split(":")[1].trim();
         }
+
 
     }
 
@@ -71,7 +73,7 @@ public class CurrencyJsonParser {
                 //connection.setDoOutput(true);
 
                 // give it 15 seconds to respond
-                connection.setReadTimeout(15 * 1000);
+                //connection.setReadTimeout(15 * 1000);
                 connection.connect();
 
                 // read the output from the server
@@ -81,6 +83,7 @@ public class CurrencyJsonParser {
                 while ((line = reader.readLine()) != null) {
                     manipulateStringData(line);
                 }
+                connection.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -92,6 +95,8 @@ public class CurrencyJsonParser {
                     }
                 }
             }
+
+
             return allDataFromJson;
         }
 
