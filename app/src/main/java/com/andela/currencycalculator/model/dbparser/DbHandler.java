@@ -26,7 +26,7 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
         String query = "CREATE TABLE " + TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_BASE_CURRENCY + " TEXT, " +
-                COLUMN_CURRENCY + " TEXT, " +
+                COLUMN_CURRENCY + " TEXT , " +
                 COLUMN_EXCHANGE_RATE + " DOUBLE, " +
                 COLUMN_DATE + " DATE " +
                 ");";
@@ -47,7 +47,6 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
         values.put(COLUMN_CURRENCY, currency.getCurrency());
         values.put(COLUMN_EXCHANGE_RATE, currency.getExchangeRate());
         values.put(COLUMN_DATE, currency.getDateCreated());
-
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_NAME, null, values);
         db.close();
@@ -68,7 +67,7 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
             double exchangeRate = cursorHandle.getDouble(cursorHandle.getColumnIndex(COLUMN_EXCHANGE_RATE));
             allCurrencyInDataBase.add(new Currency(baseCurrency, exchangeRate, currency));
         }
-
+        cursorHandle.close();
         db.close();
         return allCurrencyInDataBase;
     }
@@ -86,4 +85,13 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
         return checkDB != null;
     }
 
+    public void updateDatabase(String currencyCode, Double newValue){
+        SQLiteDatabase sq = getWritableDatabase();
+        String selection = COLUMN_CURRENCY + " like ? ";
+        String args[] = {currencyCode};
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_CURRENCY,newValue);
+        sq.update(TABLE_NAME,values,selection,args);
+
+    }
 }
