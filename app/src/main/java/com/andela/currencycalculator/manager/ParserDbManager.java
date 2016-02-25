@@ -1,12 +1,16 @@
 package com.andela.currencycalculator.manager;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.andela.currencycalculator.model.currency.Currency;
+import com.andela.currencycalculator.model.currency.CurrencyMap;
 import com.andela.currencycalculator.model.dbparser.DbHandler;
 import com.andela.currencycalculator.model.jsonparser.CurrencyJsonParser;
+import com.andela.currencycalculator.model.jsonparser.JsonParserInterface;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Spykins on 20/02/2016.
@@ -17,10 +21,12 @@ public class ParserDbManager {
     private JsonParserInterface jsonParserInterface;
     private static ParserDbManager parserDbManager;
     private ArrayList<Currency> allCurrency;
-    Context context;
+    private CurrencyMap currencyMap;
+    private Context context;
 
     private ParserDbManager(Context context) {
         this.context = context;
+        currencyMap = new CurrencyMap(context);
         currencyJsonParser = new CurrencyJsonParser(this);
         jsonParserInterface = (JsonParserInterface) context;
         allCurrency = new ArrayList<>();
@@ -42,9 +48,16 @@ public class ParserDbManager {
     }
 
     public void addAllCurrencyDataToDb() {
-        for (Currency currency : allCurrency) {
-            dbHandler.insertCurrencyInDatabase(currency);
+        if(dbHandler.hasDataBase(context)){
+            for (Currency currency : allCurrency) {
+                dbHandler.updateDatabase(currency.getCurrency(),currency.getExchangeRate());
+            }
+        }else{
+            for (Currency currency : allCurrency) {
+                dbHandler.insertCurrencyInDatabase(currency);
+            }
         }
+
         jsonParserInterface.notifyActivity();
 
     }
@@ -59,11 +72,15 @@ public class ParserDbManager {
         addAllCurrencyDataToDb();
     }
 
-    public interface JsonParserInterface {
-        void notifyActivity();
-    }
-
     public boolean hasDatabase(){
         return dbHandler.hasDataBase(context);
+    }
+
+    public HashMap<String,ArrayList<String>> readAllCurrencyInFile(){
+            return currencyMap.getCurrencyCodeCountryAndSymbol();
+    }
+
+    public String getCurrencyIcon(String currencyCode){
+        return currencyMap.getCurrencyIcon(currencyCode);
     }
 }
