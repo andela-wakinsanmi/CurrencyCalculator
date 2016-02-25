@@ -22,19 +22,6 @@ public class Currency {
         dateCreated = sdf.format(date);
     }
 
-    public void setBaseCurrency(String baseCurrency) {
-        this.baseCurrency = baseCurrency;
-    }
-
-    public void setExchangeRate(double exchangeRate) {
-        this.exchangeRate = exchangeRate;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-
     public String getBaseCurrency() {
         return baseCurrency;
     }
