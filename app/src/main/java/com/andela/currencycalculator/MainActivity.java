@@ -5,40 +5,37 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andela.currencycalculator.model.currency.Currency;
+import com.andela.currencycalculator.adapter.SpinnerAdapter;
 import com.andela.currencycalculator.manager.ParserDbManager;
-import com.andela.currencycalculator.model.currency.CurrencyMap;
-
-import org.w3c.dom.Text;
+import com.andela.currencycalculator.model.helper.SpinnerCurrency;
+import com.andela.currencycalculator.model.helper.StringManipulator;
+import com.andela.currencycalculator.model.jsonparser.JsonParserInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements ParserDbManager.JsonParserInterface,
+public class MainActivity extends AppCompatActivity implements JsonParserInterface,
         AdapterView.OnItemSelectedListener {
+
     ParserDbManager parserDbManager;
     Spinner spinnerFrom, spinnerTo;
-    CurrencyMap currencyMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         parserDbManager = ParserDbManager.getInstance(this);
-        currencyMap = new CurrencyMap(this);
         spinnerTo = (Spinner) findViewById(R.id.spinner_To);
         spinnerFrom = (Spinner) findViewById(R.id.spinner_from);
-
 
         if(isConnectionAvailable()){
             parserDbManager.getDataFromJson();
@@ -50,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements ParserDbManager.J
         }
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        //notifyActivity();
+        super.onStart();
     }
 
     public void keyPressed(View view) {
@@ -100,20 +103,20 @@ public class MainActivity extends AppCompatActivity implements ParserDbManager.J
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        String valueSelected = (String) parent.getItemAtPosition(pos);
+        SpinnerCurrency valueSelected = (SpinnerCurrency) parent.getItemAtPosition(pos);
         if (parent.getId() == R.id.spinner_from) {
             Button buttonFrom = (Button) findViewById(R.id.currency_converting_From);
-            buttonFrom.setText(valueSelected);
+            buttonFrom.setText(valueSelected.getSpinnerCodeText());
             TextView currencyTextInput = (TextView) findViewById(R.id.currencyTextInput);
-            currencyTextInput.setText(currencyMap.getCurrencyIcon(valueSelected));
+            currencyTextInput.setText(parserDbManager.getCurrencyIcon(valueSelected.getSpinnerCodeText()));
 
             //Do calculation based on what is selected
 
         } else {
             Button buttonFrom = (Button) findViewById(R.id.currency_converting_To);
-            buttonFrom.setText(valueSelected);
+            buttonFrom.setText(valueSelected.getSpinnerCodeText());
             TextView currencyTextAnswer = (TextView) findViewById(R.id.currencyTextAnswer);
-            currencyTextAnswer.setText(currencyMap.getCurrencyIcon(valueSelected));
+            currencyTextAnswer.setText(parserDbManager.getCurrencyIcon(valueSelected.getSpinnerCodeText()));
             //Do calculation based on what is selected
         }
 
@@ -126,19 +129,26 @@ public class MainActivity extends AppCompatActivity implements ParserDbManager.J
 
     @Override
     public void notifyActivity() {
-        ArrayList<Currency> allCurrency = parserDbManager.readAllCurrencyDataFromDb();
+        HashMap<String, ArrayList<String>> allCurrenciesInFile = parserDbManager.readAllCurrencyInFile();
+        ArrayList<SpinnerCurrency> currencyKeys = new ArrayList<>();
 
+        //Loop through Map and create SpinnerCurrencyOutOfit
 
-        ArrayList<String> currencyKeys = new ArrayList<>();
-        for (Currency currency : allCurrency) {
-            currencyKeys.add(currency.getCurrency());
+        for(Map.Entry<String,ArrayList<String>> entry : allCurrenciesInFile.entrySet()){
+            //the symbol code
+            String code = entry.getKey();
+            if(entry.getValue().size() > 0){
+                String imageName = StringManipulator.replaceSpaceToLower(entry.getValue().get(0));
+                int resID = getResources().getIdentifier(imageName , "drawable", getPackageName());
+                currencyKeys.add(new SpinnerCurrency(resID, code));
+            }
+
         }
-
         spinnerFrom.setOnItemSelectedListener(this);
         spinnerTo.setOnItemSelectedListener(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, currencyKeys);
+        SpinnerAdapter adapter = new SpinnerAdapter(this,
+                R.layout.spinner_layout,R.id.spinnerCodeView, currencyKeys);
 
         spinnerFrom.setAdapter(adapter);
         spinnerTo.setAdapter(adapter);
