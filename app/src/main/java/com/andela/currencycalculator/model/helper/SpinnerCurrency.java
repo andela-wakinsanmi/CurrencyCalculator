@@ -7,9 +7,16 @@ public class SpinnerCurrency {
     String spinnerCodeText;
     int imageId;
 
-    public SpinnerCurrency(int imageId, String spinnerCodeText) {
+    public String getCurrencyCountry() {
+        return currencyCountry;
+    }
+
+    String currencyCountry;
+
+    public SpinnerCurrency(int imageId, String spinnerCodeText, String currencyCountry) {
         this.imageId = imageId;
         this.spinnerCodeText = spinnerCodeText;
+        this.currencyCountry = currencyCountry;
     }
 
     public int getImageId() {

@@ -37,7 +37,8 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             view = inflater.inflate(groupId,parent,false);
             spinnerViewHolder.imageView = (ImageView) view.findViewById(R.id.spinnerImageView);
-            spinnerViewHolder.textView = (TextView)view.findViewById(R.id.spinnerCodeView);
+            spinnerViewHolder.currencyCodeTextView = (TextView)view.findViewById(R.id.spinnerCodeView);
+            spinnerViewHolder.currencyCountryTextView = (TextView)view.findViewById((R.id.spinnerCountryView));
             view.setTag(spinnerViewHolder);
         } else {
             spinnerViewHolder = (SpinnerViewHolder) view.getTag();
@@ -45,7 +46,8 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
 
         if (spinnerCurrencies.get(position) != null){
             spinnerViewHolder.imageView.setImageResource(spinnerCurrencies.get(position).getImageId());
-            spinnerViewHolder.textView.setText(spinnerCurrencies.get(position).getSpinnerCodeText());
+            spinnerViewHolder.currencyCodeTextView.setText(spinnerCurrencies.get(position).getSpinnerCodeText());
+            spinnerViewHolder.currencyCountryTextView.setText(spinnerCurrencies.get(position).getCurrencyCountry());
         }
 
         return view;
@@ -57,7 +59,10 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
 
     class SpinnerViewHolder{
         ImageView imageView;
-        TextView textView;
+        TextView currencyCodeTextView;
+        TextView currencyCountryTextView;
+
+
 
     }
 }

@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements JsonParserInterfa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         parserDbManager = ParserDbManager.getInstance(this);
         spinnerTo = (Spinner) findViewById(R.id.spinner_To);
         spinnerFrom = (Spinner) findViewById(R.id.spinner_from);
@@ -139,8 +141,9 @@ public class MainActivity extends AppCompatActivity implements JsonParserInterfa
             String code = entry.getKey();
             if(entry.getValue().size() > 0){
                 String imageName = StringManipulator.replaceSpaceToLower(entry.getValue().get(0));
-                int resID = getResources().getIdentifier(imageName , "drawable", getPackageName());
-                currencyKeys.add(new SpinnerCurrency(resID, code));
+                int resID = getResources().getIdentifier(imageName, "drawable", getPackageName());
+
+                currencyKeys.add(new SpinnerCurrency(resID, code,imageName));
             }
 
         }
