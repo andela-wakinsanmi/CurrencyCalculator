@@ -86,6 +86,7 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
     }
 
     public void updateDatabase(String currencyCode, Double newValue){
+
         SQLiteDatabase sq = getWritableDatabase();
         String selection = COLUMN_CURRENCY + " like ? ";
         String args[] = {currencyCode};
