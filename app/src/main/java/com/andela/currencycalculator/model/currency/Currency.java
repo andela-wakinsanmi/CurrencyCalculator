@@ -37,4 +37,8 @@ public class Currency {
     public String getDateCreated() {
         return dateCreated;
     }
+
+    public String toString(){
+        return getBaseCurrency() + " : " + getCurrency() + " : " + getExchangeRate();
+    }
 }
