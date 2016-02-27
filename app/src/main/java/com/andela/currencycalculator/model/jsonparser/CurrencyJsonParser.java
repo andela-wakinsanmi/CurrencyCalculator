@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.andela.currencycalculator.model.currency.Currency;
-import com.andela.currencycalculator.manager.ParserDbManager;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
 import java.io.BufferedReader;
@@ -21,10 +20,17 @@ import java.util.ArrayList;
 public class CurrencyJsonParser {
     private ArrayList<Currency> allDataFromJson;
     private String baseCurrency;
-    private ParserDbManager parserDbManager;
 
-    public CurrencyJsonParser(ParserDbManager parserDbManager) {
-        this.parserDbManager = parserDbManager;
+    public void setDbManagerListener(DbManagerListener dbManagerListener) {
+        this.dbManagerListener = dbManagerListener;
+    }
+
+    private DbManagerListener dbManagerListener;
+    private BufferedReader reader = null;
+
+
+    public CurrencyJsonParser(DbManagerListener dbManagerListener) {
+        this.dbManagerListener = dbManagerListener;
     }
 
     public void loadRate() {
@@ -52,14 +58,13 @@ public class CurrencyJsonParser {
 
     }
 
-    public class FetchExchangeFromJson extends AsyncTask<String, Void, ArrayList<Currency>> {
+    class FetchExchangeFromJson extends AsyncTask<String, Void, ArrayList<Currency>> {
 
 
         @Override
         protected ArrayList<Currency> doInBackground(String... params) {
 
             URL url;
-            BufferedReader reader = null;
             try {
                 // create the HttpURLConnection
                 Uri jsonUri = Uri.parse(JsonParserConfig.JSON_URL.getRealName());
@@ -73,7 +78,7 @@ public class CurrencyJsonParser {
                 //connection.setDoOutput(true);
 
                 // give it 15 seconds to respond
-                //connection.setReadTimeout(15 * 1000);
+                connection.setReadTimeout(15 * 1000);
                 connection.connect();
 
                 // read the output from the server
@@ -102,10 +107,10 @@ public class CurrencyJsonParser {
 
         @Override
         protected void onPostExecute(ArrayList<Currency> currencyList) {
-            parserDbManager.parseDataFromJson(currencyList);
+            if (reader != null) {
+                dbManagerListener.passDataToDb(currencyList);
+            }
         }
     }
 
 }
-
-

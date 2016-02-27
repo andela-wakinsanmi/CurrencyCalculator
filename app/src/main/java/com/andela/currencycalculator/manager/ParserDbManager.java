@@ -6,7 +6,8 @@ import com.andela.currencycalculator.model.currency.Currency;
 import com.andela.currencycalculator.model.currency.CurrencyMap;
 import com.andela.currencycalculator.model.dbparser.DbHandler;
 import com.andela.currencycalculator.model.jsonparser.CurrencyJsonParser;
-import com.andela.currencycalculator.model.jsonparser.JsonParserInterface;
+import com.andela.currencycalculator.model.jsonparser.DbManagerListener;
+import com.andela.currencycalculator.model.jsonparser.JsonParserListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +15,10 @@ import java.util.HashMap;
 /**
  * Created by Spykins on 20/02/2016.
  */
-public class ParserDbManager {
+public class ParserDbManager implements DbManagerListener {
     private CurrencyJsonParser currencyJsonParser;
     private DbHandler dbHandler;
-    private JsonParserInterface jsonParserInterface;
+    private JsonParserListener jsonParserListener;
     private static ParserDbManager parserDbManager;
     private ArrayList<Currency> allCurrency;
     private CurrencyMap currencyMap;
@@ -27,7 +28,7 @@ public class ParserDbManager {
         this.context = context;
         currencyMap = new CurrencyMap(context);
         currencyJsonParser = new CurrencyJsonParser(this);
-        jsonParserInterface = (JsonParserInterface) context;
+        currencyJsonParser.setDbManagerListener(this);
         allCurrency = new ArrayList<>();
         dbHandler = new DbHandler(context, null, null, 1);
     }
@@ -35,11 +36,9 @@ public class ParserDbManager {
     public static ParserDbManager getInstance(Context context) {
         if (parserDbManager == null) {
             parserDbManager = new ParserDbManager(context);
-            return parserDbManager;
         }
 
         return parserDbManager;
-
     }
 
     public void getDataFromJson() {
@@ -47,18 +46,21 @@ public class ParserDbManager {
     }
 
     public void addAllCurrencyDataToDb() {
-        if(dbHandler.hasDataBase(context)){
+        if (dbHandler.hasDataBase(context)) {
             for (Currency currency : allCurrency) {
-                dbHandler.updateDatabase(currency.getCurrency(),currency.getExchangeRate());
+                dbHandler.updateDatabase(currency.getCurrency(), currency.getExchangeRate());
             }
-        }else{
+        } else {
             for (Currency currency : allCurrency) {
                 dbHandler.insertCurrencyInDatabase(currency);
             }
         }
 
-        jsonParserInterface.notifyActivity();
-
+        if (jsonParserListener != null && allCurrency.size() != 0) {
+            jsonParserListener.notifyActivity(allCurrency);
+        } else {
+            readAllCurrencyDataFromDb();
+        }
     }
 
     public ArrayList<Currency> readAllCurrencyDataFromDb() {
@@ -71,15 +73,24 @@ public class ParserDbManager {
         addAllCurrencyDataToDb();
     }
 
-    public boolean hasDatabase(){
+    public boolean hasDatabase() {
         return dbHandler.hasDataBase(context);
     }
 
-    public HashMap<String,ArrayList<String>> readAllCurrencyInFile(){
-            return currencyMap.getCurrencyCodeCountryAndSymbol();
+    public HashMap<String, ArrayList<String>> readAllCurrencyInFile() {
+        return currencyMap.getCurrencyCodeCountryAndSymbol();
     }
 
-    public String getCurrencyIcon(String currencyCode){
+    public String getCurrencyIcon(String currencyCode) {
         return currencyMap.getCurrencyIcon(currencyCode);
+    }
+
+    public void setJsonParserListener(JsonParserListener jsonParserListener) {
+        this.jsonParserListener = jsonParserListener;
+    }
+
+    @Override
+    public void passDataToDb(ArrayList<Currency> dataFromJson) {
+        parseDataFromJson(dataFromJson);
     }
 }
