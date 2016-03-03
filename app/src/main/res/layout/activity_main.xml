@@ -101,7 +101,8 @@
                 android:id="@+id/currency_switch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="⇌" />
+                android:onClick="switchMode"
+                android:text="mode" />
             <!-- <Button
                 android:id="@+id/currency_converting_to"
                 android:layout_width="match_parent"
@@ -117,6 +118,7 @@
                 android:id="@+id/buttonCancel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="deleteButtonClicked"
                 android:text="C" />
             <Button
                 android:id="@+id/currency_converting_To"
@@ -163,6 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:onClick="functionKeyPressed"
+                android:tag="/"
                 android:text="/" />
 
         </LinearLayout>
@@ -198,6 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:onClick="functionKeyPressed"
+                android:tag="X"
                 android:text="X" />
 
         </LinearLayout>
@@ -265,6 +269,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="functionKeyPressed"
+                android:tag="+"
                 android:text="+" />
             <Button
                 android:id="@+id/buttonEquals"
