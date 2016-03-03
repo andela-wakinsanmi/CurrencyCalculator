@@ -80,19 +80,15 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
                     SQLiteDatabase.OPEN_READONLY);
             checkDB.close();
         } catch (SQLiteException e) {
-            // database doesn't exist yet.
         }
         return checkDB != null;
     }
 
-    public void updateDatabase(String currencyCode, Double newValue){
-
+    public void updateDatabase(String currencyCode, Double newValue) {
         SQLiteDatabase sq = getWritableDatabase();
-        String selection = COLUMN_CURRENCY + " like ? ";
-        String args[] = {currencyCode};
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_CURRENCY,newValue);
-        sq.update(TABLE_NAME,values,selection,args);
+        String query = "UPDATE " + TABLE_NAME + " " +
+                "SET " + COLUMN_EXCHANGE_RATE + " = " + newValue + " WHERE " + COLUMN_ID + " = " + 0;
+        sq.execSQL(query);
 
     }
 }
