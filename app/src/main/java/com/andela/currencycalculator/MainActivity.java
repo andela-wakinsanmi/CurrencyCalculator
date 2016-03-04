@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
      */
     public void keyPressed(View view) {
-        if (inputNumber != null && inputNumber.length() < 10) {
+        if (inputNumber != null || inputNumber.equals("") && inputNumber.length() < 10) {
             if (StringManipulator.isOperator(inputNumber)) {
                 //calculatorManager.addOperator(view.getTag().toString());
                 TextView inputTextView = (TextView) findViewById(R.id.inputTextView);
@@ -162,21 +162,26 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     public void answerKeyPressed(View view) {
         TextView outputView = (TextView) findViewById(R.id.outputText);
         TextView inputView = (TextView) findViewById(R.id.inputTextView);
+        if(inputNumber != null && !inputNumber.equals("")){
 
-        if (!inputNumber.contains("ans")) {
-            if (currencyMode) {
-                calculatorManager.addInputIntoArray(spinnerFromSelectedText +
-                        CurrencyConstant.CURRENCY_DELIMETER + inputNumber);
-                inputNumber = calculatorManager.performOperation(spinnerToSelectedText);
-                updateOutputView();
-            } else {
-                calculatorManager.addInputIntoArray(inputNumber);
-                inputNumber = calculatorManager.performOperation("");
+            if (!inputNumber.contains("ans")) {
+                if (currencyMode) {
+                    calculatorManager.addInputIntoArray(spinnerFromSelectedText +
+                            CurrencyConstant.CURRENCY_DELIMETER + inputNumber);
+                    inputNumber = calculatorManager.performOperation(spinnerToSelectedText);
+                    updateOutputView();
+                } else {
+                    calculatorManager.addInputIntoArray(inputNumber);
+                    inputNumber = calculatorManager.performOperation("");
+                }
+                outputView.setText(inputNumber);
+                inputNumber = "ans " + CurrencyConstant.CURRENCY_DELIMETER + inputNumber;
+                calculatorManager.reInitializeArray();
+                inputView.setText("");
             }
-            outputView.setText(inputNumber);
-            inputNumber = "ans " + CurrencyConstant.CURRENCY_DELIMETER + inputNumber;
+        } else {
+            //clear the whole thing
             calculatorManager.reInitializeArray();
-            inputView.setText("");
         }
 
     }
@@ -184,12 +189,16 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     public void dotKeyPressed(View view) {
 
         TextView inputTextView = (TextView) findViewById(R.id.inputTextView);
-        if (inputNumber != null && !inputNumber.contains(".") && !inputNumber.equals("")) {
+        if (inputNumber != null && !inputNumber.contains(".") &&
+                !StringManipulator.isOperator(inputNumber) && !inputNumber.equals("")) {
             inputNumber = inputNumber + ".";
-        }
-        if (inputNumber != null && inputNumber.contains("ans")) {
+        } else if(StringManipulator.isOperator(inputNumber) || inputNumber.equals("")) {
+            inputNumber = "0.";
+
+        } else if(inputNumber!= null && inputNumber.contains("ans")) {
             inputNumber = "";
         }
+
         inputTextView.setText(inputNumber);
     }
 
