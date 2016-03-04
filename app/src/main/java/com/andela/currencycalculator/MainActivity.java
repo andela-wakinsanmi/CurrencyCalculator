@@ -1,5 +1,6 @@
 package com.andela.currencycalculator;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +19,7 @@ import com.andela.currencycalculator.calculatorbrain.CalculatorManager;
 import com.andela.currencycalculator.calculatorbrain.CurrencyConstant;
 import com.andela.currencycalculator.manager.ParserDbManager;
 import com.andela.currencycalculator.model.currency.Currency;
+import com.andela.currencycalculator.model.currency.TopTen;
 import com.andela.currencycalculator.model.helper.SpinnerCurrency;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 import com.andela.currencycalculator.model.jsonparser.JsonParserListener;
@@ -25,6 +27,7 @@ import com.andela.currencycalculator.model.jsonparser.JsonParserListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity implements JsonParserListener,
         AdapterView.OnItemSelectedListener {
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     private CalculatorManager calculatorManager;
     private String inputNumber = "";
     private boolean currencyMode = true;
+    private ArrayList<String> allCurrencyInput;
+    private boolean sameCurrencySelected = false;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +52,21 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         parserDbManager.setJsonParserListener(this);
         spinnerTo = (Spinner) findViewById(R.id.spinner_To);
         spinnerFrom = (Spinner) findViewById(R.id.spinner_from);
+        allCurrencyInput = new ArrayList<>();
+        progress = new ProgressDialog(this);
+        progress.setCancelable(false);
+        //progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(false);
 
         if (isConnectionAvailable()) {
+            progress.setMessage("Fetching exchange rate");
+            progress.show();
             parserDbManager.getDataFromJson();
+
         } else if (parserDbManager.hasDatabase()) {
+            progress.setMessage("reading from database");
+
+            progress.show();
             notifyActivity(parserDbManager.readAllCurrencyDataFromDb());
         } else {
             Toast.makeText(this, "You need to be connected to internet", Toast.LENGTH_LONG).show();
@@ -141,7 +158,8 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
                 String sendingInto = spinnerFromSelectedText +
                         CurrencyConstant.CURRENCY_DELIMETER + inputNumber;
                 calculatorManager.addInputIntoArray(sendingInto);
-
+                allCurrencyInput.add(sendingInto);
+                allCurrencyInput.add(view.getTag().toString());
             } else {
                 calculatorManager.addInputIntoArray(inputNumber);
             }
@@ -149,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
             calculatorManager.onPressedOfFunctionKey(inputNumber);
 
         }
+        Log.d("waleola", " allcurrency inputed in function key pressed " + allCurrencyInput.toString());
 
     }
     /*
@@ -162,14 +181,48 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     public void answerKeyPressed(View view) {
         TextView outputView = (TextView) findViewById(R.id.outputText);
         TextView inputView = (TextView) findViewById(R.id.inputTextView);
+
         if(inputNumber != null && !inputNumber.equals("")){
 
             if (!inputNumber.contains("ans")) {
                 if (currencyMode) {
                     calculatorManager.addInputIntoArray(spinnerFromSelectedText +
                             CurrencyConstant.CURRENCY_DELIMETER + inputNumber);
-                    inputNumber = calculatorManager.performOperation(spinnerToSelectedText);
-                    updateOutputView();
+                    allCurrencyInput.add(spinnerFromSelectedText +
+                            CurrencyConstant.CURRENCY_DELIMETER + inputNumber);
+                    Log.d("waleola", " allcurrency inputed in answer key pressed " + allCurrencyInput.toString());
+
+                    for(String currencyValue : allCurrencyInput){
+                        if(currencyValue.contains(spinnerToSelectedText)) {
+                            sameCurrencySelected = true;
+                        }
+                    }
+                    if(sameCurrencySelected){
+                        // switch to calculator mode
+                        calculatorManager.reInitializeArray();
+                        calculatorManager.switchMode(false);
+                        for (String currencyValue : allCurrencyInput){
+                            Log.d("waleola", "int loop " + currencyValue);
+                            if(currencyValue.contains(spinnerToSelectedText)){
+                                calculatorManager.addInputIntoArray(currencyValue.split(CurrencyConstant.CURRENCY_DELIMETER)[1]);
+                            } else if (StringManipulator.isOperator(currencyValue)) {
+                                calculatorManager.onPressedOfFunctionKey(currencyValue);
+                            } else if(StringManipulator.isOperator(currencyValue.split(CurrencyConstant.CURRENCY_DELIMETER)[1])){
+                                calculatorManager.onPressedOfFunctionKey(currencyValue.split(CurrencyConstant.CURRENCY_DELIMETER)[1]);
+
+                            }
+
+                        }
+                        sameCurrencySelected = false;
+                        inputNumber = calculatorManager.performOperation("");
+                        calculatorManager.reInitializeArray();
+                        calculatorManager.switchMode(true);
+
+                    } else {
+                        inputNumber = calculatorManager.performOperation(spinnerToSelectedText);
+                        updateOutputView();
+                    }
+
                 } else {
                     calculatorManager.addInputIntoArray(inputNumber);
                     inputNumber = calculatorManager.performOperation("");
@@ -183,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
             //clear the whole thing
             calculatorManager.reInitializeArray();
         }
+        allCurrencyInput = new ArrayList<>();
 
     }
 
@@ -257,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     @Override
     public void notifyActivity(ArrayList<Currency> currencies) {
         //Parsing value from the database/parser into the currency converter....
+        progress.dismiss();
         calculatorManager = new CalculatorManager(currencies, currencyMode);
         calculatorManager.switchMode(currencyMode);
         for (Currency currency : currencies) {
@@ -267,18 +322,30 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     private void setSpinnerDisplay() {
         HashMap<String, ArrayList<String>> allCurrenciesInFile = parserDbManager.readAllCurrencyInFile();
         ArrayList<SpinnerCurrency> currencyKeys = new ArrayList<>();
+        TreeMap<String, ArrayList<String>> sortedCurrencies = new TreeMap<>(allCurrenciesInFile);
 
         //Loop through Map and create SpinnerCurrencyOutOfit
+        int counter = 0;
+        TopTen topTen = new TopTen();
+        ArrayList<String> allTopTen = topTen.getTopTen();
 
-        for (Map.Entry<String, ArrayList<String>> entry : allCurrenciesInFile.entrySet()) {
+        for (Map.Entry<String, ArrayList<String>> entry : sortedCurrencies.entrySet()) {
             //the symbol code
             String code = entry.getKey();
             if (entry.getValue().size() > 0) {
                 String imageName = StringManipulator.replaceSpaceToLower(entry.getValue().get(0));
                 int resID = getResources().getIdentifier(imageName, "drawable", getPackageName());
-
-                currencyKeys.add(new SpinnerCurrency(resID, code, imageName));
+                if(allTopTen.contains(code)) {
+                    currencyKeys.add(0, new SpinnerCurrency(resID, code, imageName));
+                } else {
+                    currencyKeys.add(new SpinnerCurrency(resID, code, imageName));
+                }
             }
+
+        }
+
+        for (SpinnerCurrency spinnerCurrency : currencyKeys){
+            Log.d("waleola", "" + spinnerCurrency.getSpinnerCodeText());
 
         }
         spinnerFrom.setOnItemSelectedListener(this);
