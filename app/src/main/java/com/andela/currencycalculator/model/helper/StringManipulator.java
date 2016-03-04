@@ -14,7 +14,6 @@ public class StringManipulator {
 
     public static String replaceSpaceToLower(String line) {
         return line.replace(" ", "").toLowerCase();
-
     }
 
     public static String removeLastComma(String line) {
@@ -26,7 +25,7 @@ public class StringManipulator {
         DecimalFormat decimalFormat = new DecimalFormat(".##");
         String answerString = String.valueOf(answer);
 
-        if (answerString.contains("-")) {
+        if (answerString.contains("-") || answerString.contains("E")) {
             return answerString;
         }
         if (answer % 1 == 0) {
