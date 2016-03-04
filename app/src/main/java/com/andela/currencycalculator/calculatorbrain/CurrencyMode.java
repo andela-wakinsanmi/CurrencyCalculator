@@ -13,7 +13,8 @@ public class CurrencyMode extends CalculatorBrain {
     }
 
     public void addInputIntoArray(String numberEntered) {
-        if (!numberEntered.equals("") && !StringManipulator.isOperator(numberEntered)) {
+        if (!numberEntered.equals("") && !StringManipulator.isOperator
+                (numberEntered.split(CurrencyConstant.CURRENCY_DELIMETER)[1])) {
             String currency = numberEntered.split(CurrencyConstant.CURRENCY_DELIMETER)[0].trim();
             String amountEntered = numberEntered.split(
                     CurrencyConstant.CURRENCY_DELIMETER)[1].trim();

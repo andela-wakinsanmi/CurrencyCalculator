@@ -1,8 +1,5 @@
 package com.andela.currencycalculator.calculatorbrain;
 
-import android.util.Log;
-
-import com.andela.currencycalculator.model.currency.Currency;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
 import java.util.ArrayList;
@@ -34,14 +31,12 @@ public abstract class CalculatorBrain {
 
     public void onPressedOfFunctionKey(String functionKey) {
         if (StringManipulator.isOperator(arrayList.get(arrayList.size() - 1))) {
-            Log.d("waleola", " = enter remove mode " + arrayList.toString());
             arrayList.remove(arrayList.size() - 1);
             arrayList.remove(arrayList.size() - 1);
         }
 
         arrayList.add(functionKey);
         arrayList.add(functionKey);
-        Log.d("waleola", " after adding function key " + arrayList.toString());
 
     }
 
@@ -55,9 +50,8 @@ public abstract class CalculatorBrain {
         int arraySize = arrayList.size();
 
         while (arraySize != 1) {
-            if (arraySize > 3) {
-                Log.d("waleola", " performing operation " + arrayList.toString());
 
+            if (arraySize > 3) {
 
                 if (arrayList.get(3).contains(CalculatorConstant.CALC_MULTIPLY) ||
                         arrayList.get(3).contains(CalculatorConstant.CALC_DIVIDE)) {
