@@ -6,11 +6,6 @@ package com.andela.currencycalculator.model.helper;
 public class SpinnerCurrency {
     String spinnerCodeText;
     int imageId;
-
-    public String getCurrencyCountry() {
-        return currencyCountry;
-    }
-
     String currencyCountry;
 
     public SpinnerCurrency(int imageId, String spinnerCodeText, String currencyCountry) {
@@ -25,5 +20,9 @@ public class SpinnerCurrency {
 
     public String getSpinnerCodeText() {
         return spinnerCodeText;
+    }
+
+    public String getCurrencyCountry() {
+        return currencyCountry;
     }
 }

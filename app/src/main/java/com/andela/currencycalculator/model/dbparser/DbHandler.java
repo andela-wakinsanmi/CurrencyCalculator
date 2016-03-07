@@ -16,7 +16,6 @@ import java.util.ArrayList;
  */
 public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
 
-
     public DbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
@@ -30,9 +29,7 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
                 COLUMN_EXCHANGE_RATE + " DOUBLE, " +
                 COLUMN_DATE + " DATE " +
                 ");";
-
         db.execSQL(query);
-
     }
 
     @Override
@@ -56,7 +53,6 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
     public ArrayList<Currency> readCurrencyFromDatabase() {
         ArrayList<Currency> allCurrencyInDataBase = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-
 
         String query = "SELECT * FROM " + TABLE_NAME;
         Cursor cursorHandle = db.rawQuery(query, null);
@@ -89,6 +85,6 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
         String query = "UPDATE " + TABLE_NAME + " " +
                 "SET " + COLUMN_EXCHANGE_RATE + " = " + newValue + " WHERE " + COLUMN_ID + " = " + 0;
         sq.execSQL(query);
-
     }
+
 }

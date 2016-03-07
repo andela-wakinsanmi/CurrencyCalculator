@@ -28,7 +28,7 @@ public abstract class CalculatorBrain {
         arrayList.add(functionKey);
     }
 
-    protected String performOperationNow() {
+    public String performOperation() {
         if (StringManipulator.isOperator(arrayList.get(arrayList.size() - 1))) {
             arrayList.remove(arrayList.size() - 1);
             arrayList.remove(arrayList.size() - 1);
@@ -61,8 +61,8 @@ public abstract class CalculatorBrain {
 
             }
         }
-
-        return StringManipulator.formatToTwoDecimalPlaces(calc);
+        //Log.d("waleola", "answer = " + StringManipulator.formatToTwoDecimalPlaces(calc));
+        return StringManipulator.formatToTwoDecimalPlaces(calc).trim();
     }
 
     private void removeValueAtIndex(int index, double calculatedValue) {

@@ -1,5 +1,7 @@
 package com.andela.currencycalculator.calculatorbrain;
 
+import android.util.Log;
+
 /**
  * Created by Spykins on 02/03/2016.
  */
@@ -9,7 +11,7 @@ public class CalculatorMode extends CalculatorBrain {
         super();
     }
 
-    protected void addInputIntoArray(String numberEntered) {
+    public void addInputIntoArray(String numberEntered) {
         if (arrayList.size() > 0) {
             arrayList.remove(arrayList.size() - 1);
         }
@@ -17,7 +19,9 @@ public class CalculatorMode extends CalculatorBrain {
 
     }
 
-    protected String getResult(String outputCurrency) {
-        return performOperationNow();
+    public String getResult(String outputCurrency) {
+        String answer = performOperation();
+        //Log.d("spykins", "Answer from comput = " + answer);
+        return answer.trim() ;
     }
 }

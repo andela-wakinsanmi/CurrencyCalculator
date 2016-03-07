@@ -74,13 +74,6 @@ public class CurrencyMap {
         }
         return null;
     }
-    public HashMap<String, String> getCurrencyCodeToCountry() {
-        return currencyCodeToCountry;
-    }
-
-    public HashMap<String, String> getCurrencyCodeToSymbol() {
-        return currencyCodeToSymbol;
-    }
 
     public HashMap<String, ArrayList<String>> getCurrencyCodeCountryAndSymbol() {
             return currencyCodeCountryAndSymbol;

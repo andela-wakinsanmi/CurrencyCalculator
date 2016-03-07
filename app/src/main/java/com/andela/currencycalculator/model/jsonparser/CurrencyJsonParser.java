@@ -20,14 +20,12 @@ import java.util.ArrayList;
 public class CurrencyJsonParser {
     private ArrayList<Currency> allDataFromJson;
     private String baseCurrency;
+    private DbManagerListener dbManagerListener;
+    private BufferedReader reader = null;
 
     public void setDbManagerListener(DbManagerListener dbManagerListener) {
         this.dbManagerListener = dbManagerListener;
     }
-
-    private DbManagerListener dbManagerListener;
-    private BufferedReader reader = null;
-
 
     public CurrencyJsonParser(DbManagerListener dbManagerListener) {
         this.dbManagerListener = dbManagerListener;
@@ -54,34 +52,22 @@ public class CurrencyJsonParser {
         if (line.split(":")[0].trim().equals(JsonParserConfig.JSON_BASE_CURRENCY.getRealName())) {
             baseCurrency = line.split(":")[1].trim();
         }
-
-
     }
 
     class FetchExchangeFromJson extends AsyncTask<String, Void, ArrayList<Currency>> {
-
 
         @Override
         protected ArrayList<Currency> doInBackground(String... params) {
 
             URL url;
             try {
-                // create the HttpURLConnection
                 Uri jsonUri = Uri.parse(JsonParserConfig.JSON_URL.getRealName());
                 url = new URL(jsonUri.toString());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                // just want to do an HTTP GET here
                 connection.setRequestMethod("GET");
-
-                // uncomment this if you want to write output to this url
-                //connection.setDoOutput(true);
-
-                // give it 15 seconds to respond
                 connection.setReadTimeout(15 * 1000);
                 connection.connect();
-
-                // read the output from the server
                 reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                 String line = "";
@@ -101,7 +87,6 @@ public class CurrencyJsonParser {
                 }
             }
 
-
             return allDataFromJson;
         }
 
@@ -109,6 +94,8 @@ public class CurrencyJsonParser {
         protected void onPostExecute(ArrayList<Currency> currencyList) {
             if (reader != null) {
                 dbManagerListener.passDataToDb(currencyList);
+            } else {
+                dbManagerListener.readDataFromDb();
             }
         }
     }

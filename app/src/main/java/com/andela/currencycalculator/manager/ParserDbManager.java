@@ -27,6 +27,7 @@ public class ParserDbManager implements DbManagerListener {
     private ParserDbManager(Context context) {
         this.context = context;
         currencyMap = new CurrencyMap(context);
+        //currencyMap.
         currencyJsonParser = new CurrencyJsonParser(this);
         currencyJsonParser.setDbManagerListener(this);
         allCurrency = new ArrayList<>();
@@ -85,6 +86,10 @@ public class ParserDbManager implements DbManagerListener {
         return currencyMap.getCurrencyIcon(currencyCode);
     }
 
+    public String getCurrencyCountry(String currencyCode) {
+        return currencyMap.getCurrencyName(currencyCode);
+    }
+
     public void setJsonParserListener(JsonParserListener jsonParserListener) {
         this.jsonParserListener = jsonParserListener;
     }
@@ -92,5 +97,10 @@ public class ParserDbManager implements DbManagerListener {
     @Override
     public void passDataToDb(ArrayList<Currency> dataFromJson) {
         parseDataFromJson(dataFromJson);
+    }
+
+    @Override
+    public void readDataFromDb() {
+        jsonParserListener.notifyActivity(readAllCurrencyDataFromDb());
     }
 }

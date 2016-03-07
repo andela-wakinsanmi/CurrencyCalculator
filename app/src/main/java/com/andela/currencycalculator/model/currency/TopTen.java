@@ -9,7 +9,7 @@ public class  TopTen {
     private ArrayList<String> topTen;
 
     private enum MyList{
-        USD,NGN,KWD, BHD,OMR, GBP,EUR,CHF,LYD,BND,SGD,AUD ;
+        NGN,USD,KWD, BHD,OMR, GBP,EUR,CHF,LYD,BND,SGD,AUD
     }
 
     public TopTen() {

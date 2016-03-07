@@ -90,6 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
                 android:onClick="currencyFrom"
                 android:text="NGN" />
             <Spinner
@@ -98,26 +100,14 @@
                 android:layout_height="0dp" />
             <Button
                 android:id="@+id/currency_switch"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
+                android:textSize="20sp"
                 android:onClick="switchMode"
-                android:text="mode" />
-            <!-- <Button
-                android:id="@+id/currency_converting_to"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="₦" />
-                -->
-            <!--<Spinner
-                android:id="@+id/planets_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-                -->
+                android:text="CURR" />
 
             <Button
                 android:id="@+id/buttonCancel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="deleteButtonClicked"
                 android:text="C" />
             <Button
@@ -125,6 +115,8 @@
                 style="?android:attr/spinnerStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:onClick="currencyTo"
                 android:text="NGN" />
@@ -141,29 +133,25 @@
             android:orientation="horizontal">
             <Button
                 android:id="@+id/button7"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:onClick="keyPressed"
+                style="@style/btnStyle"
                 android:tag="7"
                 android:text="7" />
             <Button
                 android:id="@+id/button8"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="8"
                 android:text="8" />
             <Button
                 android:id="@+id/button9"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="9"
                 android:text="9" />
             <Button
                 android:id="@+id/buttonDivide"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="functionKeyPressed"
                 android:tag="/"
                 android:text="/" />
@@ -177,29 +165,25 @@
             android:orientation="horizontal">
             <Button
                 android:id="@+id/button4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="4"
                 android:text="4" />
             <Button
                 android:id="@+id/button5"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="5"
                 android:text="5" />
             <Button
                 android:id="@+id/button6"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="6"
                 android:text="6"/>
             <Button
                 android:id="@+id/buttonMultiply"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="functionKeyPressed"
                 android:tag="X"
                 android:text="X" />
@@ -214,29 +198,25 @@
             android:orientation="horizontal">
             <Button
                 android:id="@+id/button1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="1"
                 android:text="1" />
             <Button
                 android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="2"
                 android:text="2" />
             <Button
                 android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="3"
                 android:text="3" />
             <Button
                 android:id="@+id/buttonSubtract"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="functionKeyPressed"
                 android:tag="-"
                 android:text="-" />
@@ -250,31 +230,24 @@
 
             <Button
                 android:id="@+id/button0"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
+                style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="0"
                 android:text="0" />
             <Button
                 android:id="@+id/buttonDot"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                style="@style/btnStyle"
                 android:onClick="dotKeyPressed"
                 android:text="." />
             <Button
                 android:id="@+id/buttonAdd"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                style="@style/btnStyle"
                 android:onClick="functionKeyPressed"
                 android:tag="+"
                 android:text="+" />
             <Button
                 android:id="@+id/buttonEquals"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                style="@style/btnStyle"
                 android:onClick="answerKeyPressed"
                 android:layout_weight="1"
                 android:text="=" />

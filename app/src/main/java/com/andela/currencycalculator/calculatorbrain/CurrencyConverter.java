@@ -18,7 +18,6 @@ public class CurrencyConverter {
     }
 
     public String exchangeFromCurrencyTo(String convertFrom, String convertTo, String amount) {
-
         double answer = 0;
         if (currencyAndExchangeRate.containsKey(convertFrom) &&
                 currencyAndExchangeRate.containsKey(convertTo)) {
@@ -40,6 +39,7 @@ public class CurrencyConverter {
 
         double outputExchangeRateToDollar = currencyAndExchangeRate.get(convertTo);
         answer = inputInDollar * outputExchangeRateToDollar;
+
         return answer;
     }
 
