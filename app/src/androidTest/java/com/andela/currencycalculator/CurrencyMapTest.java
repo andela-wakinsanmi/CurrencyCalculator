@@ -1,48 +1,38 @@
 package com.andela.currencycalculator;
 
-import android.app.Instrumentation;
-import android.content.Context;
-import android.content.pm.InstrumentationInfo;
 import android.test.AndroidTestCase;
-import android.test.mock.MockContext;
 
-import junit.framework.TestCase;
+import com.andela.currencycalculator.model.currency.CurrencyMap;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Spykins on 07/03/2016.
  */
 public class CurrencyMapTest extends AndroidTestCase {
-    MockContext mMockContext = new MockContext();
     CurrencyMap currencyMap;
-    @Before
+
     public void setUp() {
         currencyMap = new CurrencyMap(mContext);
     }
 
-
-    @Test
     public void testGetCurrencyIcon() throws Exception {
-        assertTrue("1".equals("1"));
-
+        assertTrue(currencyMap.getCurrencyIcon("NGN").equals("₦"));
+        assertTrue(currencyMap.getCurrencyIcon("USD").equals("$"));
+        assertTrue(currencyMap.getCurrencyIcon("GHS").equals("¢"));
+        assertTrue(currencyMap.getCurrencyIcon("MNT").equals("₮"));
+        assertTrue(currencyMap.getCurrencyIcon("SYP").equals( "£"));
     }
 
-    @Test
-    public void testHasCurrencyInfo() throws Exception {
-
-    }
-
-    @Test
     public void testGetCurrencyName() throws Exception {
-
+        assertTrue(currencyMap.getCurrencyName("NGN").equals("Nigeria"));
+        assertTrue(currencyMap.getCurrencyName("CHF").equals("Switzerland"));
+        assertTrue(currencyMap.getCurrencyName("CNY").equals("China"));
+        assertTrue(currencyMap.getCurrencyName("GHS").equals("Ghana"));
+        assertTrue(currencyMap.getCurrencyName("HKD").equals("Hong Kong"));
     }
 
-    @Test
     public void testGetCurrencyCodeCountryAndSymbol() throws Exception {
+        assertTrue(currencyMap.getCurrencyCodeCountryAndSymbol() != null);
 
     }
 }

@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by Spykins on 22/02/2016.
+ * @author Akinsanmi Waleola
+ * @since 2/02/2016.
+ * @version 1
  */
 public class CurrencyMap {
     private Context context;
@@ -36,10 +38,10 @@ public class CurrencyMap {
         InputStream inputStream = context.getResources().openRawResource(R.raw.currency);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         currencyCodeCountryAndSymbol = new HashMap<>();
-        ArrayList<String> countryAndSymbol;
+        ArrayList<String> countryAndSymbol = new ArrayList<>();
+        ;
         try {
             while ((data = reader.readLine()) != null) {
-                countryAndSymbol = new ArrayList<>();
                 if(data.split(":").length == 3){
                     String code = StringManipulator.clearApostrophe(data.split(":")[0].trim());
                     String country = StringManipulator.clearApostrophe(data.split(":")[1].trim());
@@ -49,6 +51,7 @@ public class CurrencyMap {
                     countryAndSymbol.add(country);
                     countryAndSymbol.add(symbol);
                     currencyCodeCountryAndSymbol.put(code, countryAndSymbol);
+                    countryAndSymbol = new ArrayList<>();
                 }
             }
             inputStream.close();
@@ -64,7 +67,7 @@ public class CurrencyMap {
         return currencyCode;
     }
 
-    public boolean hasCurrencyInfo(String currencyCode){
+    private boolean hasCurrencyInfo(String currencyCode){
         return currencyCodeToCountry.containsKey(currencyCode);
     }
 

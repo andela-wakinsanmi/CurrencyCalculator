@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andela.currencycalculator.adapter.SpinnerAdapter;
-import com.andela.currencycalculator.calculatorbrain.CalculatorManager;
+import com.andela.currencycalculator.manager.CalculatorManager;
 import com.andela.currencycalculator.calculatorbrain.CurrencyConstant;
 import com.andela.currencycalculator.manager.ParserDbManager;
 import com.andela.currencycalculator.model.currency.Currency;
@@ -30,6 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @author Akinsanmi Waleola
+ * @since 2/02/2016.
+ * @version 1
+ */
+
 public class MainActivity extends AppCompatActivity implements JsonParserListener,
         AdapterView.OnItemSelectedListener {
 
@@ -38,6 +44,16 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     private String spinnerFromSelectedText;
     private String spinnerToSelectedText;
     private CalculatorManager calculatorManager;
+    /**
+     * inputNumber used to save keypressed by user and answer
+     * <p>
+     *     inputNumber used in :
+     *     @{@link MainActivity#keyPressed(View)}
+
+     * </p>
+     *
+
+     */
     private String inputNumber = "";
     private boolean currencyMode = true;
     private ArrayList<String> allCurrencyInput;
@@ -83,13 +99,27 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
         } else if (parserDbManager.hasDatabase()) {
             progress.setMessage("reading from database");
-
             progress.show();
             notifyActivity(parserDbManager.readAllCurrencyDataFromDb());
         } else {
             Toast.makeText(this, "You need to be connected to internet", Toast.LENGTH_LONG).show();
         }
     }
+
+    /**
+     * KeyPressed is called when a user presses a keypad (0-9) in the view
+     * <p>
+     *     When the button is pressed
+     *     Check if inputNumber doesn't contain ans and it's not null
+     *     save the value in the variable {@link MainActivity#inputNumber}.
+     *     This method has helper methods
+     *     {@link MainActivity#checkIfInputIsOperator()}
+     *     {@link MainActivity#updateOutputView()}
+     *     {@link MainActivity#checkIfInputIsZero(TextView, View)}
+     * </p>
+     * @param view which is a button
+
+     */
 
     public void keyPressed(View view) {
         functionButtonPressed.setTextColor(Color.parseColor("#FFFFFF"));
@@ -109,26 +139,34 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
     }
 
+    /**
+     * helper method for {@link MainActivity#keyPressed(View)}
+     */
+
     private void checkIfInputIsOperator() {
         if (StringManipulator.isOperator(inputNumber)) {
             TextView inputTextView = (TextView) findViewById(R.id.inputTextView);
             inputTextView.setText("");
             inputNumber = "";
-        }
-        if (inputNumber != null && inputNumber.contains("ans" + CurrencyConstant.CURRENCY_DELIMETER)) {
+        } else if (inputNumber != null && inputNumber.contains("ans")) {
             inputNumber = "";
         }
     }
 
+    /**
+     * helper method for {@link MainActivity#keyPressed(View)}
+     */
+
     private void checkIfInputIsZero(TextView inputTextView, View view) {
+        String buttonPressed = view.getTag().toString();
+
         if (inputNumber.equals("0") || inputNumber.equals("")) {
-            String buttonPressed = view.getTag().toString();
             inputTextView.setText(buttonPressed);
             inputNumber = buttonPressed;
             updateOutputView();
 
         } else {
-            String buttonPressed = view.getTag().toString();
+            buttonPressed = view.getTag().toString();
             inputNumber = inputNumber + buttonPressed;
             inputTextView.setText(inputNumber);
             updateOutputView();
@@ -136,10 +174,15 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         }
     }
 
+    /**
+     * Updates the outputview based on the inputText
+     * helper method for {@link MainActivity#keyPressed(View)}
+     */
     private void updateOutputView() {
         TextView outputView = (TextView) findViewById(R.id.outputText);
-        if (currencyMode && calculatorManager != null && !StringManipulator.isOperator(inputNumber)
-                && inputNumber != null && !inputNumber.equals("") && !inputNumber.contains("ans")) {
+        if (currencyMode && (calculatorManager != null) && (!StringManipulator.isOperator(inputNumber))
+                && (inputNumber != null && !inputNumber.equals("")) && !inputNumber.contains("ans")) {
+
             String result = calculatorManager.exchangeFromCurrencyTo(spinnerFromSelectedText,
                     spinnerToSelectedText, inputNumber);
             outputView.setText(result);
@@ -149,27 +192,32 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
     }
 
-    /*
-        Function key pressed takes the inputNumber,
-        Add it into the Brain ArrayList
-        It also calls the onPressedFunctionKey to register the function in the ArrayList
+    /**
+     * Method call when operation button is pressed in view
+     * <p>
+     * Function key pressed takes the inputNumber,
+     * Adds it into the Brain ArrayList
+     * It also calls the onPressedFunctionKey to register the function in the ArrayList
+     * <b> Helper Menthods </b>
+     * <ul>
+     *     <li> {@link MainActivity#switchFunctionKeyColor(Button)}</li>
+     *     <li>{@link CalculatorManager#addInputIntoArray(String)}</li>
+     *     <li>{@link CalculatorManager#onPressedOfFunctionKey(String)}</li>
+     * </ul>
+     *
+     * The operator button is passed into {@link MainActivity#inputNumber}
+     *  </p>
+     * @param view is the button pressed in the view
      */
     public void functionKeyPressed(View view) {
-        Button button = (Button)view;
 
-        if (button != functionButtonPressed){
-            functionButtonPressed.setTextColor(Color.parseColor("#FFFFFF"));
-            button.setTextColor(Color.parseColor("#FF0000"));
-            functionButtonPressed = button;
-        }
-
-
+        switchFunctionKeyColor((Button)view);
         if (inputNumber.contains("ans")) {
             inputNumber = inputNumber.split(
                     CurrencyConstant.CURRENCY_DELIMETER)[1].trim();
         }
 
-        if (!inputNumber.equals("") && inputNumber != null && calculatorManager != null) {
+        if (inputNumber != null && calculatorManager != null && !inputNumber.equals("")) {
             if (currencyMode) {
                 String currCodeAndValue = spinnerFromSelectedText +
                         CurrencyConstant.CURRENCY_DELIMETER + inputNumber;
@@ -184,14 +232,31 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
         }
     }
-    /*
-        adds the last input value into the calculator Brain
-        calculatorManager.addValueToCalculate(spinnerFromSelectedText + ":" + inputNumber);
-        It calls the performCalculation which returns the solution from the arraylist
-        in CalculatorManager
-        Saves the answer in the inout text  as "ans: " + the answer returned
-        clear the brain arrayList and add the new value.....
-        if operator key is selected afterwards..
+
+    /**
+     * helper method for {@link MainActivity#functionKeyPressed(View)}
+     */
+
+    private void switchFunctionKeyColor(Button button) {
+        if (button != functionButtonPressed){
+            functionButtonPressed.setTextColor(Color.parseColor("#FFFFFF"));
+            button.setTextColor(Color.parseColor("#FF0000"));
+            functionButtonPressed = button;
+        }
+    }
+
+    /**
+     *
+     * <p>
+     * adds the last input value {@link MainActivity#inputNumber} into the calculator Brain
+     * calculatorManager.addValueToCalculate(spinnerFromSelectedText + ":" + inputNumber);
+     * It calls the performCalculation {@link CalculatorManager#performOperation(String)}
+     * which returns the solution(String) from the arraylist in CalculatorManager
+     * Saves the answer in inputText {@link MainActivity#inputNumber}  as "ans: " + the answer returned
+     * clear the brain arrayList.
+     * It adds the new answer, if operator key is selected afterwards..
+     * </p>
+     * @param view is a Button
      */
 
     public void answerKeyPressed(View view) {
@@ -215,8 +280,6 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         if (currencyMode) {
             performCurrencyModeOperation();
             if (sameCurrencySelected) {
-
-                // switch to calculator mode
                 switchCurrencyModeToCalculatorMode();
             } else {
                 inputNumber = calculatorManager.performOperation(spinnerToSelectedText);
@@ -232,6 +295,12 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         calculatorManager.reInitializeArray();
         inputView.setText("");
     }
+
+    /**
+     * This runs through the arrayList {@link MainActivity#allCurrencyInput }
+     * Checks if the currency value in the arrayList is same thing
+     * Then the program switch to calculator mode
+     */
 
     private void performCurrencyModeOperation() {
         calculatorManager.addInputIntoArray(spinnerFromSelectedText +
@@ -282,10 +351,10 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         inputTextView.setText(inputNumber);
     }
 
-    /*
+    /**
         currencyFrom and CurrencyTo is onclick method on the Button
         that represents the Spinner in the UI
-        but when the button is clicked. It calls the actual spinner
+        but when the button is clicked. It calls the actual spinner object
         to wake up..
      */
     public void currencyFrom(View view) {
@@ -296,6 +365,18 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         spinnerTo.performClick();
     }
 
+    /**
+     * AdapterView.OnItemSelectedListener call back method
+     * <p>
+     *     When an item on the Spinner is selected
+     *     The value is updated by calling the
+     *     {@link MainActivity#updateSpinnerButtonTo(SpinnerCurrency)}
+     * </p>
+     * @param parent
+     * @param view
+     * @param pos
+     * @param id
+     */
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         SpinnerCurrency valueSelected = (SpinnerCurrency) parent.getItemAtPosition(pos);
@@ -307,13 +388,22 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
     }
 
+    /**
+     * The method assigns the code selected from the Spinner
+     * and assigns it to the variable {@link MainActivity#spinnerFromSelectedText}
+     * or {@link MainActivity#spinnerToSelectedText} based the spinner clicked
+     *
+     * This update the outputview based on the selected value
+     * in the spinner
+     * @param valueSelected
+     */
+
     private void updateSpinnerButtonFrom(SpinnerCurrency valueSelected) {
         Button buttonFrom = (Button) findViewById(R.id.currency_converting_From);
         spinnerFromSelectedText = valueSelected.getSpinnerCodeText();
         buttonFrom.setText(spinnerFromSelectedText);
         TextView currencyTextInput = (TextView) findViewById(R.id.currencyTextInput);
         currencyTextInput.setText(parserDbManager.getCurrencyIcon(spinnerFromSelectedText));
-        //Do calculation based on what is selected
         if (inputNumber != null && !inputNumber.equals("")) {
             updateOutputView();
         }
@@ -328,24 +418,45 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         if (inputNumber != null && !inputNumber.equals("")) {
             updateOutputView();
         }
-        //Do calculation based on what is selected
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    /**
+     * This is a call back method
+     * This method is called from the ParserDbManager to notify the activity
+     * when the ParserDbManager gets the Json file fro CurrencyJsonParser
+     * @param currencies
+     */
+
     @Override
     public void notifyActivity(ArrayList<Currency> currencies) {
-        //Parsing value from the database/parser into the currency converter....
-        progress.dismiss();
         calculatorManager = new CalculatorManager(currencies, currencyMode);
         calculatorManager.switchMode(currencyMode);
         setSpinnerDisplay();
+        progress.dismiss();
 
     }
-    /*
-        Method Loops through allCurrenciesInFile, Sort the Map in Alphabetical order
-        Adds, the Top ten Currencies and populate the ArrayList<SpinnerCurrency>
+    /**
+     * This method sets the Spinner Display
+     * <p>
+     *      Method Loops through allCurrenciesInFile, Sort the Map in Alphabetical order
+     *      Adds, the Top ten Currencies and populate the ArrayList<SpinnerCurrency>
+     *
+     *      The ArrayList currencyKeys is of type {@link SpinnerCurrency}
+     *      The arrayList (currencyKeys) will be parsed in the SpinnerAdapter
+     *      {@link SpinnerAdapter}
+     *      The ArrayList allCurrenciesInFile maps String(currencyCode) to
+     *      value(ArrayList of string => index[0] country and index[1] is the symbol)
+     *
+     *      This method calls {@link MainActivity#addItemInSpinnerArrayList(TreeMap,
+     *      ArrayList, ArrayList)}
+     *      which runs through the currencies from file and populates the currencyKeys
+     *      arrayList.
+     *
+     *
+     * </p>
      */
     private void setSpinnerDisplay() {
         HashMap<String, ArrayList<String>> allCurrenciesInFile = parserDbManager.readAllCurrencyInFile();
@@ -356,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         ArrayList<String> allTopTen = topTen.getTopTen();
 
         addItemInSpinnerArrayList(sortedCurrencies,currencyKeys,allTopTen);
+
         spinnerFrom.setOnItemSelectedListener(this);
         spinnerTo.setOnItemSelectedListener(this);
 
@@ -396,11 +508,10 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    /*
-        ..... set the Mode in Model.... and erase the screen and input text
-              In the model, reset the ArrayList
-              Switch the mode...
-
+    /**
+     *set the Mode in Model.... and erase the screen and input text
+     * In the model, reset the ArrayList
+     * Switch the mode...
      */
     public void switchMode(View view) {
         currencyMode = !currencyMode;
@@ -412,35 +523,31 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         functionButtonPressed = new Button(this);
 
         if (!currencyMode) {
-            switchModeCalculator(toButton,fromButton,modeButton);
+            switchMode(toButton, fromButton, modeButton, false);
         } else {
-            switchModeCurrency(toButton,fromButton,modeButton);
+            switchMode(toButton, fromButton, modeButton, true);
         }
     }
 
-    private void switchModeCalculator(Button toButton, Button fromButton, Button modeButton) {
-        toButton.setEnabled(false);
-        fromButton.setEnabled(false);
-        modeButton.setText(R.string.CalculatorCode);
-        TextView currencyTextInput = (TextView) findViewById(R.id.currencyTextInput);
-        TextView currencyTextOutput = (TextView) findViewById(R.id.currencyTextAnswer);
-        currencyTextInput.setText("");
-        currencyTextOutput.setText("");
-
-        calculatorManager.switchMode(currencyMode);
-        clearScreen();
-    }
-
-    private void switchModeCurrency(Button toButton, Button fromButton, Button modeButton) {
-        fromButton.setEnabled(true);
-        toButton.setEnabled(true);
-        modeButton.setText(R.string.CurrencyCode);
+    private void switchMode(Button toButton, Button fromButton, Button modeButton, boolean flag) {
         TextView outputView = (TextView) findViewById(R.id.currencyTextAnswer);
         TextView inputView = (TextView) findViewById(R.id.currencyTextInput);
-        outputView.setText(parserDbManager.getCurrencyIcon(spinnerToSelectedText));
-        inputView.setText(parserDbManager.getCurrencyIcon(spinnerFromSelectedText));
+        fromButton.setEnabled(flag);
+        toButton.setEnabled(flag);
 
-        calculatorManager.switchMode(currencyMode);
+        if(flag) {
+            modeButton.setText(R.string.CurrencyCode);
+            outputView.setText(parserDbManager.getCurrencyIcon(spinnerToSelectedText));
+            inputView.setText(parserDbManager.getCurrencyIcon(spinnerFromSelectedText));
+            calculatorManager.switchMode(currencyMode);
+
+        } else {
+            modeButton.setText(R.string.CalculatorCode);
+            inputView.setText("");
+            outputView.setText("");
+            calculatorManager.switchMode(currencyMode);
+        }
+
         clearScreen();
     }
 

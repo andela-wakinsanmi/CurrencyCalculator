@@ -86,8 +86,6 @@ public class MainActivityTest {
 
         String secondInput = performSecondInput();
 
-        //String answer = String.valueOf(Integer.parseInt(firstInput) * Integer.parseInt(secondInput));
-
         onView(withId(R.id.inputTextView)).check(matches(withText(secondInput)));
 
     }

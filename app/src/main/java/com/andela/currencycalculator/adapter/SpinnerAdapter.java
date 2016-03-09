@@ -17,6 +17,17 @@ import java.util.ArrayList;
 /**
  * Created by Spykins on 25/02/2016.
  */
+
+/**
+ *A spinner adapter allows to define two different views: one that shows
+ * the data in the spinner itself and one that shows the data in the drop
+ * down list when the spinner is pressed.
+ * {@link SpinnerAdapter#getDropDownView(int, View, ViewGroup)} Gets a View
+ * that displays in the drop down popup the data at the specified position in the data set.
+ * {@link SpinnerAdapter#getView(int, View, ViewGroup)} Get a View that displays the data
+ * at the specified position in the data set
+ *
+ */
 public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
     private ArrayList<SpinnerCurrency> spinnerCurrencies;
     private int groupId;
@@ -28,6 +39,9 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
         this.groupId = resource;
         this.context = context;
     }
+    /*
+
+     */
 
     public View getView(int position, View view, ViewGroup parent){
         SpinnerViewHolder spinnerViewHolder;
@@ -61,8 +75,6 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
         ImageView imageView;
         TextView currencyCodeTextView;
         TextView currencyCountryTextView;
-
-
 
     }
 }

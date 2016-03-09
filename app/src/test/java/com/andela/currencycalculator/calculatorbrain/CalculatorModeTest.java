@@ -20,23 +20,16 @@ public class CalculatorModeTest {
     public void testAddInputIntoArray() throws Exception {
 
         calculatorMode.addInputIntoArray("2");
-        calculatorMode.onPressedOfFunctionKey(CalculatorConstant.CALC_ADDITION);
+        calculatorMode.onPressedOfFunctionKey(CalculatorConstant.CALC_MULTIPLY);
         calculatorMode.addInputIntoArray("3");
-       /* calculatorMode.onPressedOfFunctionKey("+");
-        calculatorMode.addInputIntoArray("3");
+        calculatorMode.onPressedOfFunctionKey("+");
+        calculatorMode.addInputIntoArray("5");
         calculatorMode.onPressedOfFunctionKey("/");
-        calculatorMode.addInputIntoArray("6");*/
+        calculatorMode.addInputIntoArray("6");
 
-        calculatorMode.performOperation();
-        assertTrue(Integer.parseInt(calculatorMode.getResult("")) == 5);
-
-
-
+        String answer = calculatorMode.getResult("");
+        assertTrue(answer.equals("6.83"));
 
     }
 
-    @Test
-    public void testGetResult() throws Exception {
-
-    }
 }

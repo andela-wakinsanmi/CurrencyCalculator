@@ -27,7 +27,6 @@ public class ParserDbManager implements DbManagerListener {
     private ParserDbManager(Context context) {
         this.context = context;
         currencyMap = new CurrencyMap(context);
-        //currencyMap.
         currencyJsonParser = new CurrencyJsonParser(this);
         currencyJsonParser.setDbManagerListener(this);
         allCurrency = new ArrayList<>();

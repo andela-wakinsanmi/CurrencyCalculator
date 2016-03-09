@@ -21,7 +21,7 @@ public class CalculatorMode extends CalculatorBrain {
 
     public String getResult(String outputCurrency) {
         String answer = performOperation();
-        //Log.d("spykins", "Answer from comput = " + answer);
+        //Log.d("spykins", "Answer from comput = " + answer + " and the length is " + answer.equals("5"));
         return answer.trim() ;
     }
 }
