@@ -38,9 +38,10 @@ public class CurrencyMap {
         InputStream inputStream = context.getResources().openRawResource(R.raw.currency);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         currencyCodeCountryAndSymbol = new HashMap<>();
-        ArrayList<String> countryAndSymbol = new ArrayList<>();
         ;
         try {
+            ArrayList<String> countryAndSymbol = new ArrayList<>();
+
             while ((data = reader.readLine()) != null) {
                 if(data.split(":").length == 3){
                     String code = StringManipulator.clearApostrophe(data.split(":")[0].trim());

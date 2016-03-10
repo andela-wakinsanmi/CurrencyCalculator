@@ -8,6 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -89,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
                 return true;
             }
         });
+
+        //TextView historyTextView = (TextView) findViewById(R.id.historyTextView);
+        //historyTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     private void initialSetUp() {
@@ -214,23 +219,36 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         switchFunctionKeyColor((Button)view);
         if (inputNumber.contains("ans")) {
             inputNumber = inputNumber.split(
-                    CurrencyConstant.CURRENCY_DELIMETER)[1].trim();
+                    CurrencyConstant.CURRENCY_DELIMITER)[1].trim();
         }
 
         if (inputNumber != null && calculatorManager != null && !inputNumber.equals("")) {
             if (currencyMode) {
                 String currCodeAndValue = spinnerFromSelectedText +
-                        CurrencyConstant.CURRENCY_DELIMETER + inputNumber;
+                        CurrencyConstant.CURRENCY_DELIMITER + inputNumber;
+
+                    if(!StringManipulator.isOperator(inputNumber)) {
+                        allCurrencyInput.add(currCodeAndValue);
+                        allCurrencyInput.add(view.getTag().toString());
+                    } else {
+                        allCurrencyInput.remove(allCurrencyInput.size()-1);
+                        allCurrencyInput.add(view.getTag().toString());
+                    }
+
+
                 calculatorManager.addInputIntoArray(currCodeAndValue);
-                allCurrencyInput.add(currCodeAndValue);
-                allCurrencyInput.add(view.getTag().toString());
+
             } else {
+
+                allCurrencyInput.add(inputNumber);
+                allCurrencyInput.add(view.getTag().toString());
                 calculatorManager.addInputIntoArray(inputNumber);
             }
             inputNumber = view.getTag().toString();
             calculatorManager.onPressedOfFunctionKey(inputNumber);
 
         }
+        updateHistoryTextView();
     }
 
     /**
@@ -243,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
             button.setTextColor(Color.parseColor("#FF0000"));
             functionButtonPressed = button;
         }
+    }
+
+    private void updateHistoryTextView() {
+        TextView historyTextView  = (TextView) findViewById(R.id.historyTextView);
+        historyTextView.setText(allCurrencyInput.toString());
     }
 
     /**
@@ -260,8 +283,12 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
      */
 
     public void answerKeyPressed(View view) {
+        functionButtonPressed.setTextColor(Color.parseColor("#FFFFFF"));
+
         TextView outputView = (TextView) findViewById(R.id.outputText);
         TextView inputView = (TextView) findViewById(R.id.inputTextView);
+        TextView historyTextView  = (TextView) findViewById(R.id.historyTextView);
+
 
         if (inputNumber != null && !inputNumber.equals("")) {
 
@@ -271,8 +298,10 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         } else {
             calculatorManager.reInitializeArray();
         }
+        historyTextView.setText(allCurrencyInput.toString());
         sameCurrencySelected = false;
-        allCurrencyInput = new ArrayList<>();
+        allCurrencyInput.clear();
+        functionButtonPressed = (Button) view;
 
     }
 
@@ -287,11 +316,12 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
             }
 
         } else {
+            allCurrencyInput.add(inputNumber);
             calculatorManager.addInputIntoArray(inputNumber);
             inputNumber = calculatorManager.performOperation("");
         }
         outputView.setText(inputNumber);
-        inputNumber = "ans " + CurrencyConstant.CURRENCY_DELIMETER + inputNumber;
+        inputNumber = "ans " + CurrencyConstant.CURRENCY_DELIMITER + inputNumber;
         calculatorManager.reInitializeArray();
         inputView.setText("");
     }
@@ -304,9 +334,9 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
 
     private void performCurrencyModeOperation() {
         calculatorManager.addInputIntoArray(spinnerFromSelectedText +
-                CurrencyConstant.CURRENCY_DELIMETER + inputNumber);
+                CurrencyConstant.CURRENCY_DELIMITER + inputNumber);
         allCurrencyInput.add(spinnerFromSelectedText +
-                CurrencyConstant.CURRENCY_DELIMETER + inputNumber);
+                CurrencyConstant.CURRENCY_DELIMITER + inputNumber);
         for (String currencyValue : allCurrencyInput) {
             if (currencyValue.contains(spinnerToSelectedText) ||
                     StringManipulator.isOperator(currencyValue)) {
@@ -323,11 +353,11 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         calculatorManager.switchMode(false);
         for (String currencyValue : allCurrencyInput) {
             if (currencyValue.contains(spinnerToSelectedText)) {
-                calculatorManager.addInputIntoArray(currencyValue.split(CurrencyConstant.CURRENCY_DELIMETER)[1]);
+                calculatorManager.addInputIntoArray(currencyValue.split(CurrencyConstant.CURRENCY_DELIMITER)[1]);
             } else if (StringManipulator.isOperator(currencyValue)) {
                 calculatorManager.onPressedOfFunctionKey(currencyValue);
-            } else if (StringManipulator.isOperator(currencyValue.split(CurrencyConstant.CURRENCY_DELIMETER)[1])) {
-                calculatorManager.onPressedOfFunctionKey(currencyValue.split(CurrencyConstant.CURRENCY_DELIMETER)[1]);
+            } else if (StringManipulator.isOperator(currencyValue.split(CurrencyConstant.CURRENCY_DELIMITER)[1])) {
+                calculatorManager.onPressedOfFunctionKey(currencyValue.split(CurrencyConstant.CURRENCY_DELIMITER)[1]);
             }
         }
         sameCurrencySelected = false;
@@ -460,6 +490,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
      */
     private void setSpinnerDisplay() {
         HashMap<String, ArrayList<String>> allCurrenciesInFile = parserDbManager.readAllCurrencyInFile();
+
         ArrayList<SpinnerCurrency> currencyKeys = new ArrayList<>();
         TreeMap<String, ArrayList<String>> sortedCurrencies = new TreeMap<>(allCurrenciesInFile);
 
@@ -516,17 +547,20 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
     public void switchMode(View view) {
         currencyMode = !currencyMode;
         //reset screen and input....
+        functionButtonPressed.setTextColor(Color.parseColor("#FFFFFF"));
         clearScreen();
         Button fromButton = (Button) findViewById(R.id.currency_converting_From);
         Button toButton = (Button) findViewById(R.id.currency_converting_To);
         Button modeButton = (Button) findViewById(R.id.currency_switch);
-        functionButtonPressed = new Button(this);
+        functionButtonPressed = (Button) view;
 
         if (!currencyMode) {
             switchMode(toButton, fromButton, modeButton, false);
         } else {
             switchMode(toButton, fromButton, modeButton, true);
         }
+        allCurrencyInput.clear();
+        updateHistoryTextView();
     }
 
     private void switchMode(Button toButton, Button fromButton, Button modeButton, boolean flag) {

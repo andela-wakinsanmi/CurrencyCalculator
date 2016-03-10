@@ -43,7 +43,6 @@ public class StringManipulator {
     }
 
     public static boolean isOperator(String lastInputValue) {
-        //String lastInputValue = currencyInput.get(currencyInput.size()-1);
         boolean flag = lastInputValue.equals(CalculatorConstant.CALC_ADDITION) ||
                 lastInputValue.equals(CalculatorConstant.CALC_SUBTRACT) ||
                 lastInputValue.equals(CalculatorConstant.CALC_MULTIPLY)

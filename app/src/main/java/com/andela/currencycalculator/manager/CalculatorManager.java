@@ -29,7 +29,7 @@ public class CalculatorManager {
         return currencyConverter.exchangeFromCurrencyTo(convertFrom, convertTo, amount);
     }
 
-    /*
+    /**
         This checks the state of the UI when calling the addInputArray
         i.e Calculator or Currency Mode...
      */

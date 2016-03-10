@@ -1,6 +1,9 @@
 package com.andela.currencycalculator.calculatorbrain;
 
+import android.util.Log;
+
 import com.andela.currencycalculator.model.currency.Currency;
+import com.andela.currencycalculator.model.helper.RoundValue;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ public class CurrencyConverter {
             answer = performCalculation(convertFrom, convertTo, amount);
         }
 
-        return StringManipulator.formatToTwoDecimalPlaces(answer);
+        return String.valueOf(RoundValue.roundValue(answer));
     }
 
     private double performCalculation(String convertFrom, String convertTo, String amount) {
@@ -34,11 +37,20 @@ public class CurrencyConverter {
             return 0;
         }
         double inputExchangeRateToDollar = currencyAndExchangeRate.get(convertFrom);
+
         double amountConverting = Double.parseDouble(amount);
+
         double inputInDollar = amountConverting / inputExchangeRateToDollar;
 
+
         double outputExchangeRateToDollar = currencyAndExchangeRate.get(convertTo);
-        answer = inputInDollar * outputExchangeRateToDollar;
+
+
+        answer = RoundValue.roundValue(inputInDollar * outputExchangeRateToDollar);
+
+        Log.d("spykins", " convertFrom " + convertFrom + " convertTo " + convertTo + " "
+                + "answer = " + RoundValue.roundValue(answer));
+
 
         return answer;
     }

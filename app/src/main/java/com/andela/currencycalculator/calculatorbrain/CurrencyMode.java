@@ -2,6 +2,7 @@ package com.andela.currencycalculator.calculatorbrain;
 
 import android.util.Log;
 
+import com.andela.currencycalculator.model.helper.RoundValue;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
 /**
@@ -17,10 +18,11 @@ public class CurrencyMode extends CalculatorBrain {
     public void addInputIntoArray(String numberEntered) {
 
         if (!numberEntered.equals("") && !StringManipulator.isOperator
-                (numberEntered.split(CurrencyConstant.CURRENCY_DELIMETER)[1])) {
-            String currency = numberEntered.split(CurrencyConstant.CURRENCY_DELIMETER)[0].trim();
+                (numberEntered.split(CurrencyConstant.CURRENCY_DELIMITER)[1])) {
+
+            String currency = numberEntered.split(CurrencyConstant.CURRENCY_DELIMITER)[0].trim();
             String amountEntered = numberEntered.split(
-                    CurrencyConstant.CURRENCY_DELIMETER)[1].trim();
+                    CurrencyConstant.CURRENCY_DELIMITER)[1].trim();
 
             String answerAfterConversion = currencyConverter.exchangeFromCurrencyTo(currency,
                     CurrencyConstant.BASE_CURRENCY, amountEntered);
@@ -31,12 +33,19 @@ public class CurrencyMode extends CalculatorBrain {
             arrayList.add(answerAfterConversion);
         }
 
+        Log.d("spykins", "arrayList " + arrayList.toString());
+
     }
 
     public String getResult(String outputCurrency) {
         String answer = performOperation();
+        Log.d("waleola", " " + arrayList.toString() + " and answer = " + answer);
 
-        return currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURRENCY,
-                outputCurrency, answer);
+        String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURRENCY,
+        outputCurrency, String.valueOf(1));
+        Log.d("waleola", " get Result method "  + " and getExchangeRate = " + getExchangeRate);
+
+        double answ = Double.valueOf(getExchangeRate) * Double.valueOf(answer) ;
+        return (String.valueOf(RoundValue.roundValue(answ)));
     }
 }

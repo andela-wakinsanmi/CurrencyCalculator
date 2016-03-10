@@ -5,5 +5,5 @@ package com.andela.currencycalculator.calculatorbrain;
  */
 public class CurrencyConstant {
     public static final String BASE_CURRENCY = "USD";
-    public static final String CURRENCY_DELIMETER = ":";
+    public static final String CURRENCY_DELIMITER = ":";
 }

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.andela.currencycalculator.model.currency.Currency;
+import com.andela.currencycalculator.model.helper.RoundValue;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
 import java.io.BufferedReader;
@@ -41,7 +42,8 @@ public class CurrencyJsonParser {
         if (allDataFromJson != null && line.split(":").length > 1) {
             String currencyName = StringManipulator.clearApostrophe(line.split(":")[0]);
             String cleanString = StringManipulator.removeLastComma(line.split(":")[1].trim());
-            Double currencyExchangeRate = Double.parseDouble(cleanString);
+            double amount = Double.parseDouble(cleanString);
+            double currencyExchangeRate = RoundValue.roundValue(amount);
 
             allDataFromJson.add(new Currency(baseCurrency, currencyExchangeRate, currencyName));
         }
@@ -53,6 +55,7 @@ public class CurrencyJsonParser {
             baseCurrency = line.split(":")[1].trim();
         }
     }
+
 
     class FetchExchangeFromJson extends AsyncTask<String, Void, ArrayList<Currency>> {
 

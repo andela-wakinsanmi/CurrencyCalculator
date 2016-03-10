@@ -1,7 +1,5 @@
 package com.andela.currencycalculator.calculatorbrain;
 
-import android.util.Log;
-
 /**
  * Created by Spykins on 02/03/2016.
  */
@@ -11,6 +9,13 @@ public class CalculatorMode extends CalculatorBrain {
         super();
     }
 
+    /**
+     * This method adds input to the array
+     * if i have [2,+,+] already
+     * The method will remove the last index [2,+]
+     * and adds the new number to it [2,+,3]
+     * @param numberEntered
+     */
     public void addInputIntoArray(String numberEntered) {
         if (arrayList.size() > 0) {
             arrayList.remove(arrayList.size() - 1);
@@ -20,8 +25,6 @@ public class CalculatorMode extends CalculatorBrain {
     }
 
     public String getResult(String outputCurrency) {
-        String answer = performOperation();
-        //Log.d("spykins", "Answer from comput = " + answer + " and the length is " + answer.equals("5"));
-        return answer.trim() ;
+        return performOperation().trim() ;
     }
 }

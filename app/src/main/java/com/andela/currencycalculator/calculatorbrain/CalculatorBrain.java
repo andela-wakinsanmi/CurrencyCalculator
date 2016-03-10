@@ -1,11 +1,30 @@
 package com.andela.currencycalculator.calculatorbrain;
 
+import android.util.Log;
+
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
 import java.util.ArrayList;
 
 /**
  * Created by Spykins on 02/03/2016.
+ */
+
+/**
+ *  CalculatorBrain keeps track of the calculator ArrayList
+ *  <p>
+ *      For this class to function properly
+ *      The algorithm is. A client has to add a number into the array
+ *      Then add an operator and then add another number
+ *      For instance, if i want to perform this calculation [2 + 3 * 5]
+ *      The first time you add a number [2],
+ *      When you add an operator, i will add it twice [2,+,+]
+ *      The next time you add another number,
+ *      The program will remove the last operator [2,+] and then add the number [2,+,3]
+ *      when the client also add the (*) operator, i will have [2, +,3,*,*],
+ *      then on press of 5, [2,+,3,*] and then [2,+,3,*,5]
+ *  </p>
+ *  For this class to function properly
  */
 public abstract class CalculatorBrain {
     protected ArrayList<String> arrayList;
@@ -14,6 +33,16 @@ public abstract class CalculatorBrain {
     public CalculatorBrain() {
         this.arrayList = new ArrayList<>();
     }
+
+    /**
+     * This method registers a function key in the ArrayList
+     * <P>
+     *     This method simply checks if the last item in the array is an operator
+     *     If it's true.. It replaces it by removing the last two index of the array
+     *     and adding the new operator to it
+     * </P>
+     * @param functionKey
+     */
 
     public void onPressedOfFunctionKey(String functionKey) {
 
@@ -25,6 +54,11 @@ public abstract class CalculatorBrain {
         arrayList.add(functionKey);
         arrayList.add(functionKey);
     }
+
+    /**
+     * This methods performs the operation on the Arraylist and returns a value.
+     * @return String
+     */
 
     protected String performOperation() {
         if (StringManipulator.isOperator(arrayList.get(arrayList.size() - 1))) {
