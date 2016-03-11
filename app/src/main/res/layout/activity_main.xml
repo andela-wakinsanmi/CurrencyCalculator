@@ -199,8 +199,8 @@
                 android:id="@+id/buttonMultiply"
                 style="@style/btnStyle"
                 android:onClick="functionKeyPressed"
-                android:tag="X"
-                android:text="X" />
+                android:tag="*"
+                android:text="*" />
 
         </LinearLayout>
 

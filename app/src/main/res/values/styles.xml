@@ -10,7 +10,7 @@
     <style name="btnStyle" >
         <item name="android:layout_width">match_parent </item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">#585858</item>
+        <item name="android:background">@drawable/btn_drawable</item>
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:gravity" >center</item>

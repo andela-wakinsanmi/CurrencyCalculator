@@ -1,7 +1,6 @@
 package com.andela.currencycalculator.manager;
 
 import com.andela.currencycalculator.calculatorbrain.CurrencyConverter;
-import com.andela.currencycalculator.manager.CalculatorManager;
 import com.andela.currencycalculator.model.helper.MockData;
 
 import org.junit.Before;
@@ -27,16 +26,16 @@ public class CalculatorManagerTest {
         CurrencyConverter currencyConverter = new CurrencyConverter();
         currencyConverter.setAllCurrencyInDb(new MockData().getArrayList());
 
-        calculatorManager.addInputIntoArray("20");
+        calculatorManager.addValueToArray("20");
         calculatorManager.onPressedOfFunctionKey("+");
-        calculatorManager.addInputIntoArray("100");
+        calculatorManager.addValueToArray("100");
         String answer = calculatorManager.performOperation("");
         assertTrue(answer.equals("120"));
 
 
-        calculatorManager.addInputIntoArray("2");
+        calculatorManager.addValueToArray("2");
         calculatorManager.onPressedOfFunctionKey("/");
-        calculatorManager.addInputIntoArray("4");
+        calculatorManager.addValueToArray("4");
         answer = calculatorManager.performOperation("");
         assertTrue(answer.equals("0.5"));
 

@@ -18,14 +18,14 @@ public class CurrencyMode extends CalculatorBrain {
     public void addInputIntoArray(String numberEntered) {
 
         if (!numberEntered.equals("") && !StringManipulator.isOperator
-                (numberEntered.split(CurrencyConstant.CURRENCY_DELIMITER)[1])) {
+                (numberEntered.split(CurrencyConstant.CURR_DELIMITER)[1])) {
 
-            String currency = numberEntered.split(CurrencyConstant.CURRENCY_DELIMITER)[0].trim();
+            String currency = numberEntered.split(CurrencyConstant.CURR_DELIMITER)[0].trim();
             String amountEntered = numberEntered.split(
-                    CurrencyConstant.CURRENCY_DELIMITER)[1].trim();
+                    CurrencyConstant.CURR_DELIMITER)[1].trim();
 
             String answerAfterConversion = currencyConverter.exchangeFromCurrencyTo(currency,
-                    CurrencyConstant.BASE_CURRENCY, amountEntered);
+                    CurrencyConstant.BASE_CURR, amountEntered);
 
             if (arrayList.size() > 0) {
                 arrayList.remove(arrayList.size() - 1);
@@ -41,7 +41,7 @@ public class CurrencyMode extends CalculatorBrain {
         String answer = performOperation();
         Log.d("waleola", " " + arrayList.toString() + " and answer = " + answer);
 
-        String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURRENCY,
+        String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURR,
         outputCurrency, String.valueOf(1));
         Log.d("waleola", " get Result method "  + " and getExchangeRate = " + getExchangeRate);
 

@@ -61,6 +61,7 @@ public abstract class CalculatorBrain {
      */
 
     protected String performOperation() {
+        Log.d("calculator", "check arrayList " + arrayList.toString());
         if (StringManipulator.isOperator(arrayList.get(arrayList.size() - 1))) {
             arrayList.remove(arrayList.size() - 1);
             arrayList.remove(arrayList.size() - 1);
@@ -93,6 +94,9 @@ public abstract class CalculatorBrain {
 
             }
         }
+
+        Log.d("calculator", "answer =  " + StringManipulator.formatToTwoDecimalPlaces(calc).trim());
+
         return StringManipulator.formatToTwoDecimalPlaces(calc).trim();
     }
 
@@ -104,7 +108,7 @@ public abstract class CalculatorBrain {
     }
 
     public void reInitializeArray() {
-        arrayList = new ArrayList<>();
+        arrayList.clear();
     }
 
     private double doArithmetic(String operator, String firstNumber, String secondNumber) {

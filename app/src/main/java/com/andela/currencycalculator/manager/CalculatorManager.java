@@ -33,7 +33,7 @@ public class CalculatorManager {
         This checks the state of the UI when calling the addInputArray
         i.e Calculator or Currency Mode...
      */
-    public void addInputIntoArray(String inputNumber) {
+    public void addValueToArray(String inputNumber) {
         if (isCurrencyMode) {
             ((CurrencyMode) calculatorFunction).addInputIntoArray(inputNumber);
         } else {
