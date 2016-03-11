@@ -285,13 +285,12 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         TextView outputView = (TextView) findViewById(R.id.outputText);
         TextView inputView = (TextView) findViewById(R.id.inputTextView);
 
-        if (inputNumber != null ) {
-            if (!inputNumber.contains("ans")) {
-                performNewCalculation(inputView, outputView);
-            }
+        if (inputNumber != null && !inputNumber.contains("ans")) {
+            performNewCalculation(inputView, outputView);
         } else {
             calculatorManager.reInitializeArray();
         }
+
         updateHistoryTextView();
         sameCurrencySelected = false;
         allCurrencyInput.clear();
@@ -318,11 +317,12 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
      */
 
     private void performCurrencyModeOperation() {
-        String newValue = spinnerFromSelectedText + CurrencyConstant.CURR_DELIMITER + inputNumber;
-        if(!newValue.equals("")) {
+        if(!inputNumber.equals("")) {
+            String newValue = spinnerFromSelectedText + CurrencyConstant.CURR_DELIMITER + inputNumber;
             calculatorManager.addValueToArray(newValue);
+            allCurrencyInput.add(newValue);
         }
-        allCurrencyInput.add(newValue);
+
         for (String currencyValue : allCurrencyInput) {
             if (currencyValue.contains(spinnerToSelectedText) ||
                     StringManipulator.isOperator(currencyValue)) {
@@ -375,7 +375,6 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         calculatorManager.switchMode(false);
         for (String currencyValue : allCurrencyInput) {
 
-
             if(!StringManipulator.isOperator(currencyValue) && !currencyValue.equals("")){
                 String currFrom = currencyValue.split(CurrencyConstant.CURR_DELIMITER)[0];
                 String value = currencyValue.split(CurrencyConstant.CURR_DELIMITER)[1];
@@ -389,11 +388,9 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
             }
 
         }
-
         inputNumber = calculatorManager.performOperation("");
         calculatorManager.reInitializeArray();
         calculatorManager.switchMode(true);
-
 
     }
 
@@ -654,6 +651,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         if(inputNumber.equals("") && allCurrencyInput.size() != 0) {
             manipulateArray();
         }
+        updateHistoryTextView();
         clearRedButton(view);
         updateOutputView();
     }

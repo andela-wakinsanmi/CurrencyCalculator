@@ -1,10 +1,8 @@
 package com.andela.currencycalculator.calculatorbrain;
 
-import android.util.Log;
 
 import com.andela.currencycalculator.model.currency.Currency;
 import com.andela.currencycalculator.model.helper.RoundValue;
-import com.andela.currencycalculator.model.helper.StringManipulator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +45,6 @@ public class CurrencyConverter {
 
 
         answer = RoundValue.roundValue(inputInDollar * outputExchangeRateToDollar);
-
-        Log.d("spykins", " convertFrom " + convertFrom + " convertTo " + convertTo + " "
-                + "answer = " + RoundValue.roundValue(answer));
-
 
         return answer;
     }

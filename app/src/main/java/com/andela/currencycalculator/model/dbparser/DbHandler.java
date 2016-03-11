@@ -82,8 +82,8 @@ public class DbHandler extends SQLiteOpenHelper implements DbConfig.FeedEntry {
 
     public void updateDatabase(String currencyCode, Double newValue) {
         SQLiteDatabase sq = getWritableDatabase();
-        String query = "UPDATE " + TABLE_NAME + " " +
-                "SET " + COLUMN_EXCHANGE_RATE + " = " + newValue + " WHERE " + COLUMN_ID + " = " + 0;
+        String query = "UPDATE " + TABLE_NAME + " " + "SET " + COLUMN_EXCHANGE_RATE + " = " +
+                newValue + " WHERE " + COLUMN_ID + " = " + ROW_LIST;
         sq.execSQL(query);
     }
 

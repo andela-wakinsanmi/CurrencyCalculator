@@ -1,7 +1,5 @@
 package com.andela.currencycalculator.calculatorbrain;
 
-import android.util.Log;
-
 import com.andela.currencycalculator.model.helper.RoundValue;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
@@ -33,17 +31,13 @@ public class CurrencyMode extends CalculatorBrain {
             arrayList.add(answerAfterConversion);
         }
 
-        Log.d("spykins", "arrayList " + arrayList.toString());
-
     }
 
     public String getResult(String outputCurrency) {
         String answer = performOperation();
-        Log.d("waleola", " " + arrayList.toString() + " and answer = " + answer);
 
         String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURR,
         outputCurrency, String.valueOf(1));
-        Log.d("waleola", " get Result method "  + " and getExchangeRate = " + getExchangeRate);
 
         double answ = Double.valueOf(getExchangeRate) * Double.valueOf(answer) ;
         return (String.valueOf(RoundValue.roundValue(answ)));

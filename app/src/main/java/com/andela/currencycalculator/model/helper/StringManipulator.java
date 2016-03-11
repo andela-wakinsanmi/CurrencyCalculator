@@ -43,11 +43,10 @@ public class StringManipulator {
     }
 
     public static boolean isOperator(String lastInputValue) {
-        boolean flag = lastInputValue.equals(CalculatorConstant.CALC_ADDITION) ||
+        return  lastInputValue.equals(CalculatorConstant.CALC_ADDITION) ||
                 lastInputValue.equals(CalculatorConstant.CALC_SUBTRACT) ||
-                lastInputValue.equals(CalculatorConstant.CALC_MULTIPLY)
-                || lastInputValue.equals(CalculatorConstant.CALC_DIVIDE);
-        return flag;
+                lastInputValue.equals(CalculatorConstant.CALC_MULTIPLY) ||
+                lastInputValue.equals(CalculatorConstant.CALC_DIVIDE);
     }
 
 }

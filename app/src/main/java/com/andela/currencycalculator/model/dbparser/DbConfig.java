@@ -8,9 +8,7 @@ public final class DbConfig {
     public DbConfig() {
 
     }
-
     public interface FeedEntry {
-
         int DATABASE_VERSION = 1;
         String DATABASE_NAME = "exchangeRate.db";
         String TABLE_NAME = "currency_exchange";
@@ -19,6 +17,7 @@ public final class DbConfig {
         String COLUMN_CURRENCY = "currency";
         String COLUMN_EXCHANGE_RATE = "exchangeRate";
         String COLUMN_DATE = "dateCreated";
+        int ROW_LIST = 0;
 
     }
 }

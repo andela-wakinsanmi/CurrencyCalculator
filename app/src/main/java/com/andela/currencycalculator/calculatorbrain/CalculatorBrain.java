@@ -1,6 +1,5 @@
 package com.andela.currencycalculator.calculatorbrain;
 
-import android.util.Log;
 
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
@@ -61,10 +60,13 @@ public abstract class CalculatorBrain {
      */
 
     protected String performOperation() {
-        Log.d("calculator", "check arrayList " + arrayList.toString());
         if (StringManipulator.isOperator(arrayList.get(arrayList.size() - 1))) {
             arrayList.remove(arrayList.size() - 1);
             arrayList.remove(arrayList.size() - 1);
+        }
+
+        if(arrayList.size() == 1) {
+            return arrayList.get(0);
         }
 
         double calc = 0;
@@ -94,8 +96,6 @@ public abstract class CalculatorBrain {
 
             }
         }
-
-        Log.d("calculator", "answer =  " + StringManipulator.formatToTwoDecimalPlaces(calc).trim());
 
         return StringManipulator.formatToTwoDecimalPlaces(calc).trim();
     }

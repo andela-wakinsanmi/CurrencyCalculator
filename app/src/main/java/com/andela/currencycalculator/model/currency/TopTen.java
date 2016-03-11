@@ -8,15 +8,11 @@ import java.util.ArrayList;
 public class  TopTen {
     private ArrayList<String> topTen;
 
-    private enum MyList{
-        NGN,USD,KWD, BHD,OMR, GBP,EUR,CHF,LYD,BND,SGD,AUD
-    }
-
     public TopTen() {
         topTen = new ArrayList<>();
 
-        for (MyList myList : MyList.values()){
-            topTen.add(myList.name());
+        for (TopTenList topTenList : TopTenList.values()){
+            topTen.add(topTenList.name());
         }
     }
 

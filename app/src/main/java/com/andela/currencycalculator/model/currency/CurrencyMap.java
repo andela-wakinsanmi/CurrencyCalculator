@@ -1,8 +1,6 @@
 package com.andela.currencycalculator.model.currency;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.andela.currencycalculator.R;
 import com.andela.currencycalculator.model.helper.StringManipulator;
 
