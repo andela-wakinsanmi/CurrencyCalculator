@@ -32,7 +32,7 @@ public class CurrencyMap {
     }
 
     private void fetchCurrencySymbols() {
-        String data = "";
+        String data;
         InputStream inputStream = context.getResources().openRawResource(R.raw.currency);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         currencyCodeCountryAndSymbol = new HashMap<>();

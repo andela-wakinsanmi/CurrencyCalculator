@@ -39,7 +39,7 @@ public class CurrencyMode extends CalculatorBrain {
         String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURR,
         outputCurrency, String.valueOf(1));
 
-        double answ = Double.valueOf(getExchangeRate) * Double.valueOf(answer) ;
-        return (String.valueOf(RoundValue.roundValue(answ)));
+        double answerAfterExchange = Double.valueOf(getExchangeRate) * Double.valueOf(answer) ;
+        return (String.valueOf(RoundValue.roundValue(answerAfterExchange)));
     }
 }

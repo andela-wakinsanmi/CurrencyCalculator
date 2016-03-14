@@ -50,7 +50,7 @@ public class CalculatorManager {
         if (isCurrencyMode) {
             return ((CurrencyMode) calculatorFunction).getResult(outputCurrency);
         }
-        return ((CalculatorMode) calculatorFunction).getResult(outputCurrency);
+        return ((CalculatorMode) calculatorFunction).getResult();
 
     }
 

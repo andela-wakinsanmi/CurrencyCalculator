@@ -8,23 +8,25 @@
     tools:context="com.andela.currencycalculator.MainActivity">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:background="#000"
-        android:orientation="vertical" >
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <HorizontalScrollView android:layout_width="fill_parent"
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content">
+
             <TextView
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/historyTextView"
-            android:text=""
-            android:textColor="#FFF"
-            android:textSize="25sp"/>
+                android:id="@+id/historyTextView"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#FFF"
+                android:textSize="25sp" />
 
         </HorizontalScrollView>
 
@@ -33,7 +35,8 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:background="#000"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/currencyTextInput"
                 android:layout_width="wrap_content"
@@ -42,24 +45,27 @@
                 android:gravity="right"
                 android:text="$"
                 android:textColor="#FFF"
-                android:textSize="50sp"/>
-        <TextView
-            android:id="@+id/inputTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="3"
-            android:gravity="right"
-            android:text="0"
-            android:textColor="#FFF"
-            android:textSize="50sp" />
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/inputTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="#FFF"
+                android:textSize="50sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
             android:background="#000"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/currencyTextAnswer"
                 android:layout_width="wrap_content"
@@ -68,7 +74,7 @@
                 android:gravity="right"
                 android:text="₦"
                 android:textColor="#FFF"
-                android:textSize="50sp"/>
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/outputText"
@@ -81,7 +87,7 @@
                 android:textColor="#FFF"
                 android:textSize="50sp" />
 
-            </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -90,7 +96,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
@@ -98,32 +103,36 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/currency_converting_From"
                 style="?android:attr/spinnerStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
                 android:onClick="currencyFrom"
                 android:text="NGN" />
+
             <Spinner
                 android:id="@+id/spinner_from"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
+
             <Button
                 android:id="@+id/currency_switch"
                 style="@style/btnStyle"
-                android:textSize="20sp"
                 android:onClick="switchMode"
-                android:text="CURR" />
+                android:text="CURR"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/buttonCancel"
                 style="@style/btnStyle"
                 android:onClick="deleteButtonClicked"
                 android:text="C" />
+
             <Button
                 android:id="@+id/currency_converting_To"
                 style="?android:attr/spinnerStyle"
@@ -134,35 +143,41 @@
                 android:gravity="center"
                 android:onClick="currencyTo"
                 android:text="NGN" />
+
             <Spinner
                 android:id="@+id/spinner_To"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/button7"
-                android:onClick="keyPressed"
                 style="@style/btnStyle"
+                android:onClick="keyPressed"
                 android:tag="7"
                 android:text="7" />
+
             <Button
                 android:id="@+id/button8"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="8"
                 android:text="8" />
+
             <Button
                 android:id="@+id/button9"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="9"
                 android:text="9" />
+
             <Button
                 android:id="@+id/buttonDivide"
                 style="@style/btnStyle"
@@ -177,24 +192,28 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/button4"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="4"
                 android:text="4" />
+
             <Button
                 android:id="@+id/button5"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="5"
                 android:text="5" />
+
             <Button
                 android:id="@+id/button6"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="6"
-                android:text="6"/>
+                android:text="6" />
+
             <Button
                 android:id="@+id/buttonMultiply"
                 style="@style/btnStyle"
@@ -210,24 +229,28 @@
             android:layout_weight="1"
 
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/button1"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="1"
                 android:text="1" />
+
             <Button
                 android:id="@+id/button2"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="2"
                 android:text="2" />
+
             <Button
                 android:id="@+id/button3"
                 style="@style/btnStyle"
                 android:onClick="keyPressed"
                 android:tag="3"
                 android:text="3" />
+
             <Button
                 android:id="@+id/buttonSubtract"
                 style="@style/btnStyle"
@@ -236,6 +259,7 @@
                 android:text="-" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -248,28 +272,30 @@
                 android:onClick="keyPressed"
                 android:tag="0"
                 android:text="0" />
+
             <Button
                 android:id="@+id/buttonDot"
                 style="@style/btnStyle"
                 android:onClick="dotKeyPressed"
                 android:text="." />
+
             <Button
                 android:id="@+id/buttonAdd"
                 style="@style/btnStyle"
                 android:onClick="functionKeyPressed"
                 android:tag="+"
                 android:text="+" />
+
             <Button
                 android:id="@+id/buttonEquals"
                 style="@style/btnStyle"
-                android:onClick="answerKeyPressed"
                 android:layout_weight="1"
+                android:onClick="answerKeyPressed"
                 android:text="=" />
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 
 </LinearLayout>

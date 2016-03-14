@@ -23,7 +23,6 @@ import java.util.ArrayList;
  *      when the client also add the (*) operator, i will have [2, +,3,*,*],
  *      then on press of 5, [2,+,3,*] and then [2,+,3,*,5]
  *  </p>
- *  For this class to function properly
  */
 public abstract class CalculatorBrain {
     protected ArrayList<String> arrayList;

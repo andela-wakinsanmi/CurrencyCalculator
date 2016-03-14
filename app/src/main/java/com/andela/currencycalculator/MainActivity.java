@@ -661,12 +661,7 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         String lastInput = allCurrencyInput.get(allCurrencyInput.size() - 1);
         allCurrencyInput.remove(allCurrencyInput.size()-1);
         if(currencyMode) {
-            if(lastInput.contains(CurrencyConstant.CURR_DELIMITER)) {
-                String[] splitValue = lastInput.split(CurrencyConstant.CURR_DELIMITER);
-                if(!StringManipulator.isOperator(splitValue[1])) {
-                    inputNumber = splitValue[1];
-                }
-            }
+            performCurrArrayManipulation(lastInput);
         } else {
             if(!StringManipulator.isOperator(lastInput)) {
                 inputNumber = lastInput;
@@ -675,6 +670,15 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
         inputText.setText(inputNumber);
         updateHistoryTextView();
         updateOutputView();
+    }
+
+    private void performCurrArrayManipulation(String lastInput) {
+        if(lastInput.contains(CurrencyConstant.CURR_DELIMITER)) {
+            String[] splitValue = lastInput.split(CurrencyConstant.CURR_DELIMITER);
+            if(!StringManipulator.isOperator(splitValue[1])) {
+                inputNumber = splitValue[1];
+            }
+        }
     }
 
     private void clearRedButton(View view) {

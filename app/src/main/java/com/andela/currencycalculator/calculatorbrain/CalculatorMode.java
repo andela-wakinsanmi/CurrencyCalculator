@@ -24,7 +24,7 @@ public class CalculatorMode extends CalculatorBrain {
 
     }
 
-    public String getResult(String outputCurrency) {
+    public String getResult() {
         return performOperation().trim() ;
     }
 }

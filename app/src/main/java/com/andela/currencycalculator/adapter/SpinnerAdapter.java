@@ -39,9 +39,6 @@ public class SpinnerAdapter extends ArrayAdapter<SpinnerCurrency> {
         this.groupId = resource;
         this.context = context;
     }
-    /*
-
-     */
 
     public View getView(int position, View view, ViewGroup parent){
         SpinnerViewHolder spinnerViewHolder;

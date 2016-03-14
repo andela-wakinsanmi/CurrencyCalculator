@@ -18,8 +18,8 @@ public class Currency {
         this.exchangeRate = exchangeRate;
         this.currency = currency;
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateCreated = sdf.format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateCreated = simpleDateFormat.format(date);
     }
 
     public String getBaseCurrency() {
