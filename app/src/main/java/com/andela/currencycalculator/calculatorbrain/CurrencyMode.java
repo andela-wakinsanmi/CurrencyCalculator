@@ -16,14 +16,14 @@ public class CurrencyMode extends CalculatorBrain {
     public void addInputIntoArray(String numberEntered) {
 
         if (!numberEntered.equals("") && !StringManipulator.isOperator
-                (numberEntered.split(CurrencyConstant.CURR_DELIMITER)[1])) {
+                (numberEntered.split(CurrencyConstant.CURR_DELIMITER.getValue())[1])) {
 
-            String currency = numberEntered.split(CurrencyConstant.CURR_DELIMITER)[0].trim();
+            String currency = numberEntered.split(CurrencyConstant.CURR_DELIMITER.getValue())[0].trim();
             String amountEntered = numberEntered.split(
-                    CurrencyConstant.CURR_DELIMITER)[1].trim();
+                    CurrencyConstant.CURR_DELIMITER.getValue())[1].trim();
 
             String answerAfterConversion = currencyConverter.exchangeFromCurrencyTo(currency,
-                    CurrencyConstant.BASE_CURR, amountEntered);
+                    CurrencyConstant.BASE_CURR.getValue(), amountEntered);
 
             if (arrayList.size() > 0) {
                 arrayList.remove(arrayList.size() - 1);
@@ -36,8 +36,8 @@ public class CurrencyMode extends CalculatorBrain {
     public String getResult(String outputCurrency) {
         String answer = performOperation();
 
-        String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(CurrencyConstant.BASE_CURR,
-        outputCurrency, String.valueOf(1));
+        String getExchangeRate = currencyConverter.exchangeFromCurrencyTo(
+                CurrencyConstant.BASE_CURR.getValue(), outputCurrency, String.valueOf(1));
 
         double answerAfterExchange = Double.valueOf(getExchangeRate) * Double.valueOf(answer) ;
         return (String.valueOf(RoundValue.roundValue(answerAfterExchange)));

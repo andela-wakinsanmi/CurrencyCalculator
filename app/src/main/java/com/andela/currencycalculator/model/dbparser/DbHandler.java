@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class DbHandler extends SQLiteOpenHelper {
 
-    public DbHandler(Context context,String name,SQLiteDatabase.CursorFactory factory,int version){
+    public DbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DbConfig.DATABASE_NAME.getRealName(), factory, 1);
     }
 
@@ -41,7 +41,7 @@ public class DbHandler extends SQLiteOpenHelper {
     public void insertCurrencyInDatabase(Currency currency) {
         ContentValues values = new ContentValues();
         values.put(DbConfig.COLUMN_BASE_CURRENCY.getRealName(), currency.getBaseCurrency());
-        values.put( DbConfig.COLUMN_CURRENCY.getRealName(), currency.getCurrency());
+        values.put(DbConfig.COLUMN_CURRENCY.getRealName(), currency.getCurrency());
         values.put(DbConfig.COLUMN_EXCHANGE_RATE.getRealName(), currency.getExchangeRate());
         values.put(DbConfig.COLUMN_DATE.getRealName(), currency.getDateCreated());
         SQLiteDatabase db = getWritableDatabase();
@@ -81,6 +81,7 @@ public class DbHandler extends SQLiteOpenHelper {
                     SQLiteDatabase.OPEN_READONLY);
             checkDB.close();
         } catch (SQLiteException e) {
+            e.printStackTrace();
         }
         return checkDB != null;
     }
@@ -88,8 +89,8 @@ public class DbHandler extends SQLiteOpenHelper {
     public void updateDatabase(String currencyCode, Double newValue) {
         SQLiteDatabase sq = getWritableDatabase();
         String query = "UPDATE " + DbConfig.TABLE_NAME.getRealName() + " " + "SET " +
-                DbConfig.COLUMN_EXCHANGE_RATE.getRealName() + " = " +
-                newValue + " WHERE " + DbConfig.COLUMN_ID.getRealName() + " = " + 0;
+                DbConfig.COLUMN_EXCHANGE_RATE.getRealName() + " = " + newValue + " WHERE " +
+                DbConfig.COLUMN_CURRENCY.getRealName() + " = " + "'" + currencyCode + "'";
         sq.execSQL(query);
     }
 

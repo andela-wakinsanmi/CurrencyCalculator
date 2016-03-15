@@ -75,8 +75,8 @@ public abstract class CalculatorBrain {
 
             if (arraySize > 3) {
 
-                if (arrayList.get(3).contains(CalculatorConstant.CALC_MULTIPLY) ||
-                        arrayList.get(3).contains(CalculatorConstant.CALC_DIVIDE)) {
+                if (arrayList.get(3).contains(CalculatorConstant.CALC_MULTIPLY.getRealName()) ||
+                        arrayList.get(3).contains(CalculatorConstant.CALC_DIVIDE.getRealName())) {
                     calc = doArithmetic(arrayList.get(3), arrayList.get(2), arrayList.get(4));
                     removeValueAtIndex(2, calc);
                     arraySize = arrayList.size();
@@ -111,14 +111,15 @@ public abstract class CalculatorBrain {
     }
 
     private double doArithmetic(String operator, String firstNumber, String secondNumber) {
-        switch (operator) {
-            case CalculatorConstant.CALC_ADDITION:
+        CalculatorConstant op = CalculatorConstant.getByRealName(operator);
+        switch (op) {
+            case CALC_ADDITION :
                 return Double.parseDouble(firstNumber) + Double.parseDouble(secondNumber);
-            case CalculatorConstant.CALC_DIVIDE:
+            case CALC_DIVIDE:
                 return Double.parseDouble(firstNumber) / Double.parseDouble(secondNumber);
-            case CalculatorConstant.CALC_MULTIPLY:
+            case CALC_MULTIPLY:
                 return Double.parseDouble(firstNumber) * Double.parseDouble(secondNumber);
-            case CalculatorConstant.CALC_SUBTRACT:
+            case CALC_SUBTRACT:
                 return Double.parseDouble(firstNumber) - Double.parseDouble(secondNumber);
             default:
                 return 0;

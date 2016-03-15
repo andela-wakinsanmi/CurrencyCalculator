@@ -43,10 +43,10 @@ public class StringManipulator {
     }
 
     public static boolean isOperator(String lastInputValue) {
-        return  lastInputValue.equals(CalculatorConstant.CALC_ADDITION) ||
-                lastInputValue.equals(CalculatorConstant.CALC_SUBTRACT) ||
-                lastInputValue.equals(CalculatorConstant.CALC_MULTIPLY) ||
-                lastInputValue.equals(CalculatorConstant.CALC_DIVIDE);
+        return  lastInputValue.equals(CalculatorConstant.CALC_ADDITION.getRealName()) ||
+                lastInputValue.equals(CalculatorConstant.CALC_SUBTRACT.getRealName()) ||
+                lastInputValue.equals(CalculatorConstant.CALC_MULTIPLY.getRealName()) ||
+                lastInputValue.equals(CalculatorConstant.CALC_DIVIDE.getRealName());
     }
 
 }
