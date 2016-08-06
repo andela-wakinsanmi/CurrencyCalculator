@@ -81,8 +81,8 @@ public class MainActivityTest {
 
         performFirstInput();
 
-        onView(withText(CalculatorConstant.CALC_MULTIPLY)).check(
-                matches(withText(CalculatorConstant.CALC_MULTIPLY))).perform(click());
+        onView(withText(CalculatorConstant.CALC_MULTIPLY.getRealName())).check(
+                matches(withText(CalculatorConstant.CALC_MULTIPLY.getRealName()))).perform(click());
 
         String secondInput = performSecondInput();
 
@@ -121,8 +121,8 @@ public class MainActivityTest {
 
         String firstInput = performFirstInput();
 
-        onView(withText(CalculatorConstant.CALC_MULTIPLY)).check(
-                matches(withText(CalculatorConstant.CALC_MULTIPLY))).perform(click());
+        onView(withText(CalculatorConstant.CALC_MULTIPLY.getRealName())).check(
+                matches(withText(CalculatorConstant.CALC_MULTIPLY.getRealName()))).perform(click());
 
         String secondInput = performSecondInput();
 

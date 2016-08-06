@@ -595,7 +595,6 @@ public class MainActivity extends AppCompatActivity implements JsonParserListene
      */
     public void switchMode(View view) {
         currencyMode = !currencyMode;
-        //reset screen and input....
         clearScreen();
         Button fromButton = (Button) findViewById(R.id.currency_converting_From);
         Button toButton = (Button) findViewById(R.id.currency_converting_To);

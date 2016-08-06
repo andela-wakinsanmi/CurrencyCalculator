@@ -1,0 +1,20 @@
+#
+# Build configuration for Circle CI
+#
+
+general:
+    artifacts:
+        - /home/ubuntu/CurrencyCalculator/app/build/outputs/apk/
+
+machine:
+    environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+
+dependencies:
+    override:
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+
+test:
+    override:
+        - (./gradlew assemble):
+            timeout: 360
